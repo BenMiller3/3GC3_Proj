@@ -12,7 +12,7 @@ A 3D runner game made with OpenGL and GLUT. The basis of this game is a runner a
 
 ## Usage
 ===========
-Clone or download the code repository
+Clone or download the code repository. 
 Enter in the commandline:
 ```bash
 make 
