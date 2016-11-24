@@ -10,3 +10,13 @@ A 3D runner game made with OpenGL and GLUT. The basis of this game is a runner a
 * Feature 2
 * Feature etc.
 
+## Usage
+===========
+Clone or download the code repository
+
+Run ```bash make ```
+
+This will create the scene.
+
+Use the arrow keys to control the character through the world.
+
