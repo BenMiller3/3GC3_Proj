@@ -6,5 +6,9 @@ A 3D runner game made with OpenGL and GLUT. The basis of this game is a runner a
 
 ## Features
 =============
-This is a project of substantial difficulty, as it contains various features. If the project is not daunting enough already, there are optional additional features that will be implemented if time allows. By utilizing OpenGL and GLUT this concept game is more than possible. With different lighting techniques, camera angles, tile textures for the background and more, this team will be able to create a beautiful and enticing world, along with a realistic and engaging, playable McMaster student.
+Some of the features that are included within this project are:
+
+* Feature 1
+* Feature 2
+* Feature etc.
 
