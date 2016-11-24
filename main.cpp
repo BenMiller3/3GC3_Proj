@@ -14,7 +14,7 @@ float spd = 0.3;
 
 //Location of the world
 float zLocation = -5.0f;
-float gameSpeed = 0.001f;
+float gameSpeed = 0.002f;
 
 // Not needed for now
 //bool spdPowerUp = true;
@@ -82,6 +82,11 @@ void display(void){
 	glTranslatef(0.0f, 0.0f, zLocation); 
 
 	zLocation += gameSpeed;
+
+	if(zLocation >= 10.0f){
+		zLocation = -5.0f;
+		bob.drawCharacter(pos,rot,-15.0f);
+	}
 
 	bob.drawCharacter(pos,rot,gameSpeed);
 	items.drawShieldPU();
