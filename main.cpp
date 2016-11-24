@@ -19,8 +19,6 @@ Character bob = Character();
 //Powerups
 Powerup items = Powerup();
 
-// END OF THE GLOBAL VARIABLES
-
 void keyboard(unsigned char key, int xIn, int yIn){
 
 	switch(key){
@@ -28,23 +26,38 @@ void keyboard(unsigned char key, int xIn, int yIn){
 			exit(0);
 		case 27:
 			exit(0);
+
+		// Movement controls
+		case 'a':
+			if(pos[0] > -4.4) pos[0] -= 0.3;
+			rot[1] = -90;
+			break;
+
+		case 'd':
+			if(pos[0] < 4.4) pos[0] += 0.3;
+			rot[1] = 90;
+			break;
+
 	}
+
+	// Update the display
+	glutPostRedisplay();	
 
 }
 
 void init(void){
 
-	glClearColor(0.8, 0.8, 0.8, 0);	// Clear the screen
-	glColor3f(1, 1, 1);			// Sets the curent drawing colour
+	glClearColor(0.8, 0.8, 0.8, 0);	
+	glColor3f(1, 1, 1);			
 
-	glMatrixMode(GL_PROJECTION);	// Specify the current matrix
-	glLoadIdentity();			// Replace current Matrix w/ identity matrix
-	gluPerspective(45, 1, 1, 100);	// Sets a perspective projection matrix
+	glMatrixMode(GL_PROJECTION);	
+	glLoadIdentity();			
+	gluPerspective(45, 1, 1, 100);	
 }
 
 void display(void){
 
-	glClear(GL_COLOR_BUFFER_BIT); // Clear buffers to preset vals
+	glClear(GL_COLOR_BUFFER_BIT); 
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -54,39 +67,29 @@ void display(void){
 
 	glTranslatef(0.0f, 0.0f, -5.0f); 
 
-	//glutWireCube(2.0f);
-
 	bob.drawCharacter(pos,rot);
 	items.drawShieldPU();
 	items.drawSpeedPU();
-	// Flush out to a single buffer
-	glFlush();	// Forces execution of GL commands in finite time
+
+	glFlush();	
 }
 
-/*
-Main function -- the program entry point!
-*/
+
 int main(int argc, char** argv){
 
-	glutInit(&argc, argv); 	// Initializes the GLUT library
-	glutInitDisplayMode(GLUT_RGBA);	// Sets the initial display mode
+	glutInit(&argc, argv); 	
+	glutInitDisplayMode(GLUT_RGBA);	
 
 	glutInitWindowPosition(50,50);
 	glutInitWindowSize(640,480);
 
-	glutCreateWindow("Intro to 3D Objects");	// Creates window and title!
+	glutCreateWindow("3GC3 Final Project");	
 
-	glutDisplayFunc(display);	// Registers f'n display as callback f'n
+	glutDisplayFunc(display);	
 	glutKeyboardFunc(keyboard);
 
 	init();
-
-	//OtherCall b -- Would take another H file and call it b
-	//b.hello(); call another function from another prog. but why
-	// I guess to make building blocks that would help to build
-	// A HOUSE! :)
-
-	glutMainLoop();	// Enters the GLUT event processing loop
+	glutMainLoop();	
 
 	return(0);
 }
