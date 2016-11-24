@@ -6,8 +6,10 @@ Character::Character(){
 }
 
 
-void Character::drawCharacter(float* pos, float* rot){
+void Character::drawCharacter(float* pos, float* rot, float gameSpeed){
 	glPushMatrix();
+
+	pos[2] = pos[2] - gameSpeed;
 
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glRotatef(rot[1], 0, 1, 0);

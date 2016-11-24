@@ -13,7 +13,8 @@ float angle = 0.0f;
 float spd = 0.3;
 
 //Location of the world
-float zLocation = 0.0f;
+float zLocation = -5.0f;
+float gameSpeed = 0.001f;
 
 // Not needed for now
 //bool spdPowerUp = true;
@@ -78,12 +79,15 @@ void display(void){
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 	glColor3f(0, 0, 0);
 
-	glTranslatef(0.0f, 0.0f, -5.0f); 
+	glTranslatef(0.0f, 0.0f, zLocation); 
 
-	bob.drawCharacter(pos,rot);
+	zLocation += gameSpeed;
+
+	bob.drawCharacter(pos,rot,gameSpeed);
 	items.drawShieldPU();
 	items.drawSpeedPU();
 
+	glutPostRedisplay();
 	glFlush();	
 }
 

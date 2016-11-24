@@ -5,6 +5,11 @@ Scene::Scene(){
 	
 }
 
+void drawField(){
+	glBegin(GL_POLYGON);
+}
+
+
 void drawScene(float location){
-	// Texture mapping over a long and thin cube
+	drawField();
 }

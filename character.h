@@ -7,7 +7,7 @@ class Character{
 
 public:
 	Character();
-	void drawCharacter(float* pos, float* rot);
+	void drawCharacter(float* pos, float* rot, float gameSpeed);
 
 };
 
