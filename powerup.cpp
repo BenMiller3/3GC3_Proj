@@ -1,14 +1,8 @@
 #include "powerup.h"
 #include "header.h"
 
-/* 
-
-Powerup::Powerup(ModelType whatType){
+Powerup::Powerup(){
 	
-	// their stuff
-	nodeType = model;
-	modelType = whatType;
-	isDrawable = true;
 }
 
 void drawPolygon(int a, int b, int c, int d, float v[8][3]){
@@ -43,17 +37,15 @@ void drawBox(float* c, float w, float h, float d){
 	cube(vertices);
 }
 
-void drawSPDPU(){
+void Powerup::drawSpeedPU(){
 	glColor3f(0, 0, 1);
 	float origin[3] = {-3, 0, 0};
 	drawBox(origin, 1, 1, 1);
 }
 
 
-void drawShieldPU(){
+void Powerup::drawShieldPU(){
 	glColor3f(0, 1, 0);
 	float origin[3] = {3, 0, 0};
 	drawBox(origin, 1, 1, 1);
 }
-
-*/

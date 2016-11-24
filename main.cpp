@@ -16,6 +16,9 @@ bool shieldPowerUp = true;
 // Character
 Character bob = Character();
 
+//Powerups
+Powerup items = Powerup();
+
 // END OF THE GLOBAL VARIABLES
 
 void keyboard(unsigned char key, int xIn, int yIn){
@@ -31,7 +34,7 @@ void keyboard(unsigned char key, int xIn, int yIn){
 
 void init(void){
 
-	glClearColor(1, 1, 1, 0);	// Clear the screen
+	glClearColor(0.8, 0.8, 0.8, 0);	// Clear the screen
 	glColor3f(1, 1, 1);			// Sets the curent drawing colour
 
 	glMatrixMode(GL_PROJECTION);	// Specify the current matrix
@@ -51,10 +54,11 @@ void display(void){
 
 	glTranslatef(0.0f, 0.0f, -5.0f); 
 
-	glutWireCube(2.0f);
+	//glutWireCube(2.0f);
 
 	bob.drawCharacter(pos,rot);
-
+	items.drawShieldPU();
+	items.drawSpeedPU();
 	// Flush out to a single buffer
 	glFlush();	// Forces execution of GL commands in finite time
 }
