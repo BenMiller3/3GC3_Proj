@@ -6,8 +6,6 @@ A 3D runner game made with OpenGL and GLUT. The basis of this game is a runner a
 
 ## Features
 =============
-Some of the features that are included within this project are:
-
 * Feature 1
 * Feature 2
 * Feature etc.
