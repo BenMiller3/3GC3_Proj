@@ -4,7 +4,7 @@
 #include "scene.h"
 
 // Camera Values
-float pos[] = {0,0,5};
+float pos[] = {0,0,10};
 float rot[] = {0, 0, 0};
 float camPos[] = {0, 10, 15};
 
@@ -16,10 +16,6 @@ float spd = 0.3;
 float zLocation = -5.0f;
 float gameSpeed = 0.002f;
 
-// Not needed for now
-//bool spdPowerUp = true;
-//bool shieldPowerUp = true;
-
 // World
 Scene theWorld = Scene();
 
@@ -28,45 +24,43 @@ Character mainCharacter = Character();
 
 //Powerups
 Powerup items = Powerup();
+bool spdPowerup = true;
+bool shieldPowerup = true;
 
 void keyboard(unsigned char key, int xIn, int yIn){
-
 	switch(key){
 		case 'q':
 			exit(0);
 		case 27:
 			exit(0);
+	}
+	glutPostRedisplay();	
+}
 
-		// Movement controls
-		case 'a':
-			if(pos[0] > -4.4) pos[0] -= 0.3;
+
+void special(int key, int x, int y){
+	int mod = glutGetModifiers();
+	if(spdPowerup && mod == GLUT_ACTIVE_SHIFT) spd = 0.5;
+	else spd = 0.3;
+
+	switch(key){
+		case GLUT_KEY_LEFT:
+			if(pos[0] > -4.4) pos[0] -= spd;
 			rot[1] = -90;
 			break;
 
-		case 'd':
-			if(pos[0] < 4.4) pos[0] += 0.3;
+		case GLUT_KEY_RIGHT:
+			if(pos[0] < 4.4) pos[0] += spd;
 			rot[1] = 90;
 			break;
-
-		//Look at camera or away from camera -- no movement
-		case 'w':
-			rot[1] = -180;
-			break;
-		case 's':
-			rot[1] = 0;
-			break;
 	}
-
-	// Update the display
-	glutPostRedisplay();	
-
+	glutPostRedisplay();
 }
 
-void init(void){
 
+void init(void){
 	glClearColor(0, 0.68, 0.146, 0);	
 	glColor3f(1, 1, 1);			
-
 	glMatrixMode(GL_PROJECTION);	
 	glLoadIdentity();			
 	gluPerspective(45, 1, 1, 100);	
@@ -105,7 +99,6 @@ void display(void){
 
 
 int main(int argc, char** argv){
-
 	glutInit(&argc, argv); 	
 	glutInitDisplayMode(GLUT_RGBA);	
 
@@ -116,6 +109,7 @@ int main(int argc, char** argv){
 
 	glutDisplayFunc(display);	
 	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(special);
 
 	init();
 	glutMainLoop();	
