@@ -7,7 +7,7 @@ class Scene{
 
 public:
 	Scene();
-	void drawScene(float location);
+	void drawScene(float zPosition);
 };
 
 #endif

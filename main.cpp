@@ -20,8 +20,11 @@ float gameSpeed = 0.002f;
 //bool spdPowerUp = true;
 //bool shieldPowerUp = true;
 
+// World
+Scene theWorld = Scene();
+
 // Character
-Character bob = Character();
+Character mainCharacter = Character();
 
 //Powerups
 Powerup items = Powerup();
@@ -61,7 +64,7 @@ void keyboard(unsigned char key, int xIn, int yIn){
 
 void init(void){
 
-	glClearColor(0.8, 0.8, 0.8, 0);	
+	glClearColor(0, 0.68, 0.146, 0);	
 	glColor3f(1, 1, 1);			
 
 	glMatrixMode(GL_PROJECTION);	
@@ -85,10 +88,14 @@ void display(void){
 
 	if(zLocation >= 10.0f){
 		zLocation = -5.0f;
-		bob.drawCharacter(pos,rot,-15.0f);
+		mainCharacter.drawCharacter(pos,rot,-15.0f);
 	}
 
-	bob.drawCharacter(pos,rot,gameSpeed);
+	// Draw road
+	theWorld.drawScene(zLocation);
+
+	// Draw Assets
+	mainCharacter.drawCharacter(pos,rot,gameSpeed);
 	items.drawShieldPU();
 	items.drawSpeedPU();
 
