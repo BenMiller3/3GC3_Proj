@@ -132,7 +132,7 @@ void display(void){
         items.drawSpeedPU();
     glPopMatrix();
     
-
+    glutSwapBuffers();
 	glutPostRedisplay();
 	glFlush();
 }
