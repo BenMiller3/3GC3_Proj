@@ -14,7 +14,7 @@ A 3D runner game made with OpenGL and GLUT. The basis of this game is a runner a
 ===========
 Clone or download the code repository
 
-Run ```bash make ```
+Run ```make ```
 
 This will create the scene.
 
