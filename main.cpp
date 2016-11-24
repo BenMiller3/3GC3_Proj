@@ -1,6 +1,7 @@
 #include "header.h"
 #include "character.h"
 #include "powerup.h"
+#include "scene.h"
 
 // Camera Values
 float pos[] = {0,0,5};
@@ -10,6 +11,9 @@ float camPos[] = {0, 10, 15};
 //Character Movement
 float angle = 0.0f;
 float spd = 0.3;
+
+//Location of the world
+float zLocation = 0.0f;
 
 // Not needed for now
 //bool spdPowerUp = true;
@@ -40,6 +44,13 @@ void keyboard(unsigned char key, int xIn, int yIn){
 			rot[1] = 90;
 			break;
 
+		//Look at camera or away from camera -- no movement
+		case 'w':
+			rot[1] = -180;
+			break;
+		case 's':
+			rot[1] = 0;
+			break;
 	}
 
 	// Update the display

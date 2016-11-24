@@ -37,13 +37,14 @@ void drawBox(float* c, float w, float h, float d){
 	cube(vertices);
 }
 
+// Speed powerup
 void Powerup::drawSpeedPU(){
 	glColor3f(0, 0, 1);
 	float origin[3] = {-3, 0, 0};
 	drawBox(origin, 1, 1, 1);
 }
 
-
+// Shield powerup
 void Powerup::drawShieldPU(){
 	glColor3f(0, 1, 0);
 	float origin[3] = {3, 0, 0};
