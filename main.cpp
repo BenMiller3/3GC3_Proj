@@ -3,6 +3,18 @@
 #include "powerup.h"
 #include "scene.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#ifdef __APPLE__
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#  include <GL/freeglut.h>
+#endif
+
 // Camera Values
 float pos[] = {0,0,10};
 float rot[] = {0, 0, 0};
@@ -68,33 +80,61 @@ void init(void){
 
 void display(void){
 
-	glClear(GL_COLOR_BUFFER_BIT); 
+    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 	glColor3f(0, 0, 0);
+    
+    //lighting
+    glPushMatrix();
+        glLoadIdentity();
+        glEnable(GL_COLOR_MATERIAL);
+        float pos1[] = {1,1,0};
+        float amb1[4] = {0.4f,0.4f,0.4f,1};
+        float diff1[4] = {1, 1, 1, 1};
+        float spec1[4] = {1, 1, 1, 1};
+        glEnable(GL_LIGHTING);
+        //turn on light bulb 0
+        glEnable(GL_LIGHT0);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, diff1);
+        glLightfv(GL_LIGHT0, GL_POSITION, pos1);
+        glLightfv(GL_LIGHT0, GL_SPECULAR, spec1);
+        glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
+    glPopMatrix();
 
-	glTranslatef(0.0f, 0.0f, zLocation); 
+	glTranslatef(0.0f, 0.0f, zLocation);
 
 	zLocation += gameSpeed;
 
 	if(zLocation >= 10.0f){
 		zLocation = -5.0f;
-		mainCharacter.drawCharacter(pos,rot,-15.0f);
+        glPushMatrix();
+            mainCharacter.drawCharacter(pos,rot,-15.0f);
+        glPopMatrix();
 	}
 
 	// Draw road
-	theWorld.drawRoad(zLocation);
+    glPushMatrix();
+        theWorld.drawRoad(zLocation);
+    glPopMatrix();
 
 	// Draw Assets
-	mainCharacter.drawCharacter(pos,rot,gameSpeed);
-	items.drawShieldPU();
-	items.drawSpeedPU();
+    glPushMatrix();
+        mainCharacter.drawCharacter(pos,rot,gameSpeed);
+    glPopMatrix();
+    glPushMatrix();
+        items.drawShieldPU();
+    glPopMatrix();
+    glPushMatrix();
+        items.drawSpeedPU();
+    glPopMatrix();
+    
 
 	glutPostRedisplay();
-	glFlush();	
+	glFlush();
 }
 
 
@@ -105,9 +145,11 @@ int main(int argc, char** argv){
 	glutInitWindowPosition(50,50);
 	glutInitWindowSize(640,480);
 
-	glutCreateWindow("3GC3 Final Project");	
+	glutCreateWindow("3GC3 Final Project");
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-	glutDisplayFunc(display);	
+	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(special);
 
