@@ -10,8 +10,10 @@ float camPos[] = {0, 10, 15};
 //Character Movement
 float angle = 0.0f;
 float spd = 0.3;
-bool spdPowerUp = true;
-bool shieldPowerUp = true;
+
+// Not needed for now
+//bool spdPowerUp = true;
+//bool shieldPowerUp = true;
 
 // Character
 Character bob = Character();
