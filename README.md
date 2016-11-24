@@ -1,4 +1,4 @@
-# McMaster 3D Runner
+# McMaster 3D Endless Runner
 ========================
 Please help me come up with a better title.
 
