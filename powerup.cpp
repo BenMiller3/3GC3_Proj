@@ -1,4 +1,4 @@
-#include "character.h"
+#include "powerup.h"
 #include "header.h"
 
 /* 
