@@ -18,5 +18,5 @@ Enter in the commandline:
 make 
 ```
 This will create the scene.
-Use the arrow keys to control the character through the world.
+Use the aswd keys to control the character through the world.
 
