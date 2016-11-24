@@ -7,7 +7,7 @@ class Scene{
 
 public:
 	Scene();
-	void drawScene(float zPosition);
+	void drawRoad(float zPosition);
 };
 
 #endif

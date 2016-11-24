@@ -92,7 +92,7 @@ void display(void){
 	}
 
 	// Draw road
-	theWorld.drawScene(zLocation);
+	theWorld.drawRoad(zLocation);
 
 	// Draw Assets
 	mainCharacter.drawCharacter(pos,rot,gameSpeed);
