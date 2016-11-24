@@ -90,9 +90,9 @@ void display(void){
     
     //lighting
     glPushMatrix();
-        glLoadIdentity();
+        //glLoadIdentity();
         glEnable(GL_COLOR_MATERIAL);
-        float pos1[] = {1,1,0};
+        float pos1[] = {100,100,0};
         float amb1[4] = {0.4f,0.4f,0.4f,1};
         float diff1[4] = {1, 1, 1, 1};
         float spec1[4] = {1, 1, 1, 1};
