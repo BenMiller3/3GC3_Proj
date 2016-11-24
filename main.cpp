@@ -14,7 +14,7 @@ float spd = 0.3;
 
 //Location of the world
 float zLocation = -5.0f;
-float gameSpeed = 0.002f;
+float gameSpeed = 0.05f;
 
 // World
 Scene theWorld = Scene();
