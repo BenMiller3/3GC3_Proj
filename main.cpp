@@ -87,23 +87,6 @@ void display(void){
 
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 	glColor3f(0, 0, 0);
-    
-    //lighting
-    glPushMatrix();
-        //glLoadIdentity();
-        glEnable(GL_COLOR_MATERIAL);
-        float pos1[] = {100,100,0};
-        float amb1[4] = {0.4f,0.4f,0.4f,1};
-        float diff1[4] = {1, 1, 1, 1};
-        float spec1[4] = {1, 1, 1, 1};
-        glEnable(GL_LIGHTING);
-        //turn on light bulb 0
-        glEnable(GL_LIGHT0);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, diff1);
-        glLightfv(GL_LIGHT0, GL_POSITION, pos1);
-        glLightfv(GL_LIGHT0, GL_SPECULAR, spec1);
-        glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
-    glPopMatrix();
 
 	glTranslatef(0.0f, 0.0f, zLocation);
 
@@ -132,9 +115,27 @@ void display(void){
         items.drawSpeedPU();
     glPopMatrix();
     
+    //lighting
+    glPushMatrix();
+        glEnable(GL_COLOR_MATERIAL);
+        glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
+        float pos1[] = {10,1,1,0};
+        float amb1[4] = {0.4f,0.4f,0.4f,1};
+        float diff1[4] = {1, 1, 1, 1};
+        float spec1[4] = {1, 1, 1, 1};
+        glEnable(GL_LIGHTING);
+        //turn on light bulb 0
+        glEnable(GL_LIGHT0);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, diff1);
+        glLightfv(GL_LIGHT0, GL_POSITION, pos1);
+        glLightfv(GL_LIGHT0, GL_SPECULAR, spec1);
+        glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
+        glPopMatrix();
+    
     glutSwapBuffers();
 	glutPostRedisplay();
-	glFlush();
+    glFlush();
+
 }
 
 
