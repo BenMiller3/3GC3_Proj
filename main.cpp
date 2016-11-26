@@ -20,7 +20,8 @@ float fast = 0.5f;
 
 //Location of the world
 float zLocation = -5.0f;
-float gameSpeed = 0.05f;
+float gameSpeed = 0.002f;
+//float gameSpeed = 0.05f;
 
 // World
 Scene theWorld = Scene();
@@ -32,6 +33,12 @@ Character mainCharacter = Character();
 Powerup items = Powerup();
 bool spdPowerup = true;
 bool shieldPowerup = true;
+
+// Randomize powerup locations
+int x1 = items.genLocation(9);
+int x2 = items.genLocation(9);
+int z1 = items.genLocation(25);
+int z2 = items.genLocation(25);
 
 //Smooth Keyboard movements
 bool leftPressed = false;
@@ -112,6 +119,12 @@ void display(void){
 
 	if(zLocation >= 10.0f){
 		zLocation = -5.0f;
+		// for now
+		x1 = items.genLocation(9);
+    	x2 = items.genLocation(9);
+    	z1 = items.genLocation(50);
+    	z2 = items.genLocation(50);
+    	// end of for now
         glPushMatrix();
             mainCharacter.drawCharacter(pos,rot,-15.0f);
         glPopMatrix();
@@ -127,19 +140,19 @@ void display(void){
         mainCharacter.drawCharacter(pos,rot,gameSpeed);
     glPopMatrix();
     glPushMatrix();
+        items.drawSpeedPU(x1,z1);
+        items.drawSpeedPU(x2,z2);
+    
         items.drawShieldPU();
-    glPopMatrix();
-    glPushMatrix();
-        items.drawSpeedPU();
     glPopMatrix();
 
     // Move the character
-    if(leftPressed == true){
+    if(leftPressed == true && pos[0] > -4.4){
     	pos[0] -= spd;
 		rot[1] = -90;
     }
     
-    if(rightPressed == true){
+    if(rightPressed == true && pos[0] < 4.4){
     	pos[0] += spd;
     	rot[1] = 90;
     }

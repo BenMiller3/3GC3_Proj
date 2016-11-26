@@ -7,8 +7,9 @@ class Powerup{
 
 public:
 	Powerup();
-	void drawSpeedPU();
+	void drawSpeedPU(int x, int z);
 	void drawShieldPU();
+	int genLocation(int range);
 };
 
 #endif

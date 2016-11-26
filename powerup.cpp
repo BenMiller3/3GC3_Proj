@@ -1,5 +1,11 @@
 #include "powerup.h"
 #include "header.h"
+#include <ctime>
+#include <cstdlib>
+#include <iostream>
+
+// Number of powerups generated per loop (treadmill reset)
+int n = 10;
 
 Powerup::Powerup(){
 	
@@ -37,11 +43,19 @@ void drawBox(float* c, float w, float h, float d){
 	cube(vertices);
 }
 
+int Powerup::genLocation(int range){
+	int x1 = rand()%range+1;
+	int x2 = (rand()%range + 1) * (-1);
+
+	return x2 + x1;
+}
+
 // Speed powerup
-void Powerup::drawSpeedPU(){
+void Powerup::drawSpeedPU(int xLocation, int zLocation){
 	glColor3f(0, 0, 1);
-	float origin[3] = {-3, 0, 0};
+	float origin[3] = {xLocation, 0, zLocation};
 	drawBox(origin, 1, 1, 1);
+	
 }
 
 // Shield powerup
