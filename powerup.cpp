@@ -44,7 +44,7 @@ void drawBox(float* c, float w, float h, float d){
 }
 
 int Powerup::genLocation(int range){
-	int x1 = rand()%range+1;
+	int x1 = rand()%(range)+1;
 	int x2 = (rand()%range + 1) * (-1);
 
 	return x2 + x1;
@@ -59,8 +59,8 @@ void Powerup::drawSpeedPU(int xLocation, int zLocation){
 }
 
 // Shield powerup
-void Powerup::drawShieldPU(){
+void Powerup::drawShieldPU(int xLocation, int zLocation){
 	glColor3f(1, 1, 0);
-	float origin[3] = {3, 0, 0};
+	float origin[3] = {xLocation, 0, zLocation};
 	drawBox(origin, 1, 1, 1);
 }

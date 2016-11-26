@@ -20,8 +20,7 @@ float fast = 0.5f;
 
 //Location of the world
 float zLocation = -5.0f;
-float gameSpeed = 0.002f;
-//float gameSpeed = 0.05f;
+float gameSpeed = 0.05f;
 
 // World
 Scene theWorld = Scene();
@@ -34,11 +33,19 @@ Powerup items = Powerup();
 bool spdPowerup = true;
 bool shieldPowerup = true;
 
-// Randomize powerup locations
-int x1 = items.genLocation(9);
-int x2 = items.genLocation(9);
-int z1 = items.genLocation(25);
-int z2 = items.genLocation(25);
+// Total Speed and Shield boxes per loop
+int totalSpeed = 20;
+int totalShield = 20;
+
+// X and Z locations of all speed blocks ** MUST be the same as totalSpeed & totalShield 
+int speedX [20];
+int speedZ [20];
+
+int shieldX [20];
+int shieldZ [20];
+
+// Sets initial powerup locations
+bool setPowerups = false;
 
 //Smooth Keyboard movements
 bool leftPressed = false;
@@ -100,7 +107,7 @@ void init(void){
 	glColor3f(1, 1, 1);			
 	glMatrixMode(GL_PROJECTION);	
 	glLoadIdentity();			
-	gluPerspective(45, 1, 1, 100);	
+	gluPerspective(45, 1, 1, 100);
 }
 
 void display(void){
@@ -117,16 +124,27 @@ void display(void){
 
 	zLocation += gameSpeed;
 
-	if(zLocation >= 10.0f){
+	if(zLocation >= 205.0f || setPowerups == false){
 		zLocation = -5.0f;
-		// for now
-		x1 = items.genLocation(9);
-    	x2 = items.genLocation(9);
-    	z1 = items.genLocation(50);
-    	z2 = items.genLocation(50);
-    	// end of for now
+
+		// Generate new locations for speed blocks
+		for(int i = 0; i<totalSpeed; i++){
+			speedX[i] = items.genLocation(9);
+			speedZ[i] = items.genLocation(200);
+		}
+
+		// Generate new locations for shield blocks
+		for(int i = 0; i<totalShield; i++){
+			shieldX[i] = items.genLocation(9);
+			shieldZ[i] = items.genLocation(200);
+		}
+		if(setPowerups==false){
+			setPowerups = true;
+			mainCharacter.drawCharacter(pos,rot,+210.0f);
+		}
+
         glPushMatrix();
-            mainCharacter.drawCharacter(pos,rot,-15.0f);
+            mainCharacter.drawCharacter(pos,rot,-210.0f);
         glPopMatrix();
 	}
 
@@ -140,10 +158,14 @@ void display(void){
         mainCharacter.drawCharacter(pos,rot,gameSpeed);
     glPopMatrix();
     glPushMatrix();
-        items.drawSpeedPU(x1,z1);
-        items.drawSpeedPU(x2,z2);
-    
-        items.drawShieldPU();
+    	// Draw speed and shield blocks from random locations
+        for(int i = 0; i<totalShield; i++){
+        	items.drawSpeedPU(speedX[i],speedZ[i]);
+        }
+
+    	for(int i = 0; i<totalSpeed; i++){
+    		items.drawShieldPU(shieldX[i],shieldZ[i]);
+    	}
     glPopMatrix();
 
     // Move the character
