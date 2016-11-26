@@ -3,18 +3,6 @@
 #include "powerup.h"
 #include "scene.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#ifdef __APPLE__
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
-#  include <GLUT/glut.h>
-#else
-#  include <GL/gl.h>
-#  include <GL/glu.h>
-#  include <GL/freeglut.h>
-#endif
-
 // Camera Values
 float pos[] = {0,0,10};
 float rot[] = {0, 0, 0};
@@ -22,7 +10,13 @@ float camPos[] = {0, 10, 15};
 
 //Character Movement
 float angle = 0.0f;
-float spd = 0.3;
+float spd = 0.003f;
+
+// @Karim rather than shift for speed when player
+// hits the box we will make them fast and 
+// not have them have to use the shift bar at all
+float slow = 0.3f;
+float fast = 0.5f;
 
 //Location of the world
 float zLocation = -5.0f;
@@ -39,36 +33,60 @@ Powerup items = Powerup();
 bool spdPowerup = true;
 bool shieldPowerup = true;
 
+//Smooth Keyboard movements
+bool leftPressed = false;
+bool rightPressed = false;
+
 void keyboard(unsigned char key, int xIn, int yIn){
 	switch(key){
 		case 'q':
 			exit(0);
 		case 27:
 			exit(0);
+		case 'a':
+			leftPressed = true;
+			break;
+		case 'd':
+			rightPressed = true;
+			break;
 	}
+
 	glutPostRedisplay();	
 }
 
+// Needed for smooth keyboard callbacks
+void keyUp(unsigned char key, int x, int y){
+	if(key=='a'){
+		leftPressed = false;
+	}
+	else if(key=='d'){
+		rightPressed = false;
+	}
+}
 
 void special(int key, int x, int y){
 	int mod = glutGetModifiers();
-	if(spdPowerup && mod == GLUT_ACTIVE_SHIFT) spd = 0.5;
-	else spd = 0.3;
 
 	switch(key){
 		case GLUT_KEY_LEFT:
-			if(pos[0] > -4.4) pos[0] -= spd;
-			rot[1] = -90;
+			leftPressed = true;
 			break;
 
 		case GLUT_KEY_RIGHT:
-			if(pos[0] < 4.4) pos[0] += spd;
-			rot[1] = 90;
+			rightPressed = true;
 			break;
 	}
 	glutPostRedisplay();
 }
 
+void specialUp(int key, int x, int y){
+	if(key == GLUT_KEY_RIGHT){
+		rightPressed = false;
+	}
+	else if(key == GLUT_KEY_LEFT){
+		leftPressed = false;
+	}
+}
 
 void init(void){
 	glClearColor(0, 0.68, 0.146, 0);	
@@ -114,6 +132,17 @@ void display(void){
     glPushMatrix();
         items.drawSpeedPU();
     glPopMatrix();
+
+    // Move the character
+    if(leftPressed == true){
+    	pos[0] -= spd;
+		rot[1] = -90;
+    }
+    
+    if(rightPressed == true){
+    	pos[0] += spd;
+    	rot[1] = 90;
+    }
     
     //lighting
     glPushMatrix();
@@ -152,7 +181,9 @@ int main(int argc, char** argv){
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutKeyboardUpFunc(keyUp);
 	glutSpecialFunc(special);
+	glutSpecialUpFunc(specialUp);
 
 	init();
 	glutMainLoop();	
