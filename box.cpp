@@ -4,11 +4,21 @@
 #include <cstdlib>
 #include <iostream>
 
-// Number of powerups generated per loop (treadmill reset)
-int n = 10;
 
-Box::Box(){
-	
+int n = 10; //Number of boxes generated per loop (treadmill reset)
+int type; //Type of box
+float boxLoc[] = {0, 0, 0};
+
+Box::Box(int typeAssigned){
+	type = typeAssigned;
+}
+
+float Box::getX(){
+	return boxLoc[0];
+}
+
+float Box::getZ(){
+	return boxLoc[2];
 }
 
 void drawPolygon(int a, int b, int c, int d, float v[8][3]){
@@ -31,7 +41,7 @@ void cube(float v[8][3]){
 }
 
 
-void drawBox(float* c, float w, float h, float d){
+void drawCuboid(float* c, float w, float h, float d){
 	float vertices[8][3] = { {c[0]-w/2, c[1]-h/2, c[2]+d/2},
 							 {c[0]-w/2, c[1]+h/2, c[2]+d/2},
 							 {c[0]+w/2, c[1]+h/2, c[2]+d/2},
@@ -43,24 +53,25 @@ void drawBox(float* c, float w, float h, float d){
 	cube(vertices);
 }
 
+
 int Box::genLocation(int range){
 	int x1 = rand()%(range)+1;
 	int x2 = (rand()%range + 1) * (-1);
-
 	return x2 + x1;
 }
 
-// Speed powerup
-void Box::drawSpeedPU(int xLocation, int zLocation){
+
+void Box::drawSpeed(int xLocation, int zLocation){
 	glColor3f(0, 0, 1);
-	float origin[3] = {xLocation, 0, zLocation};
-	drawBox(origin, 1, 1, 1);
-	
+	boxLoc[0] = xLocation;
+	boxLoc[2] = zLocation;
+	drawCuboid(boxLoc, 1, 1, 1);
 }
 
-// Shield powerup
-void Box::drawShieldPU(int xLocation, int zLocation){
-	glColor3f(1, 1, 0);
-	float origin[3] = {xLocation, 0, zLocation};
-	drawBox(origin, 1, 1, 1);
+
+void Box::drawShield(int xLocation, int zLocation){
+	glColor3f(0, 1, 0);
+	boxLoc[0] = xLocation;
+	boxLoc[2] = zLocation;
+	drawCuboid(boxLoc, 1, 1, 1);
 }
