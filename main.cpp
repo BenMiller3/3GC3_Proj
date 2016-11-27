@@ -11,7 +11,7 @@ float charRot[] = {0, 0, 0};
 
 //Character Movement
 float charAngle = 0.0f;
-float charSpeed = 0.003f;
+float charSpeed = 0.15f; //@Ben: 0.003f
 
 
 //Speed Powerup
@@ -43,7 +43,7 @@ float camPos[] = {0, 10, 15};
 //Speeds
 float slow = 0.3f;
 float fast = 0.5f;
-float gameSpeed = 0.05f;
+float boxSpeed = 0.2f; //@Ben: 0.05f
 
 
 //Smooth Character Movement Animation
@@ -118,7 +118,7 @@ void display(void){
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 
 	glTranslatef(0.0f, 0.0f, zLocation);
-	zLocation += gameSpeed;
+	zLocation += boxSpeed;
 
 	if(zLocation >= 205.0f || setPowerups == false){
 		zLocation = -5.0f;
@@ -152,7 +152,7 @@ void display(void){
 
 	//Draw Assets
     glPushMatrix();
-        mainCharacter.drawCharacter(charPos,charRot,gameSpeed);
+        mainCharacter.drawCharacter(charPos, charRot, boxSpeed);
     glPopMatrix();
 
     //Draw speed and shield boxes at random locations
@@ -191,6 +191,8 @@ void display(void){
         glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
     glPopMatrix();
     
+    if(mainCharacter.hitTest(speed)) exit(0);
+
     glutSwapBuffers();
 	glutPostRedisplay();
     glFlush();

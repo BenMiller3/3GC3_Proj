@@ -8,7 +8,7 @@ Character::Character(){ }
 
 
 bool Character::hitTest(Box box){
-	if(charLoc[0] == 0 && charLoc[2] == 0) return true;
+	if((box.getX() <= (charLoc[0] - 25) && box.getX() >= (charLoc[0] + 25)) && (box.getZ() <= (charLoc[2] - 25) && box.getZ() >= (charLoc[2] + 25))) return true;
 	else return false;
 }
 
