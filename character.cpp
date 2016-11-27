@@ -1,5 +1,6 @@
-#include "character.h"
 #include "header.h"
+#include "character.h"
+
 
 Character::Character(){
 	
