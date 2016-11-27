@@ -23,7 +23,7 @@ PROGRAM_NAME= Final_Project
 run: $(PROGRAM_NAME)
 		./$(PROGRAM_NAME)$(EXEEXT)
 
-$(PROGRAM_NAME): main.o character.o powerup.o scene.o
+$(PROGRAM_NAME): main.o character.o box.o scene.o
 		$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
 clean:
