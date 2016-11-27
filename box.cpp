@@ -13,13 +13,6 @@ Box::Box(int typeAssigned){
 	type = typeAssigned;
 }
 
-float Box::getX(){
-	return boxLoc[0];
-}
-
-float Box::getZ(){
-	return boxLoc[2];
-}
 
 void drawPolygon(int a, int b, int c, int d, float v[8][3]){
 	glBegin(GL_POLYGON);

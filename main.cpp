@@ -2,6 +2,9 @@
 #include "character.h"
 #include "box.h"
 #include "scene.h"
+#include <math.h>
+#include <iostream>
+using namespace std;
 
 
 //Character Position
@@ -55,6 +58,13 @@ Scene theWorld = Scene();
 Character mainCharacter = Character();
 Box speed = Box(0);
 Box shield = Box(1);
+
+
+bool hitTest(int x, int z){
+	int dx = charPos[0] - x;
+	if(abs(dx <= 2) && z >= 10) return true;
+	else return false;
+}
 
 
 void keyboard(unsigned char key, int xIn, int yIn){
@@ -191,7 +201,8 @@ void display(void){
         glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
     glPopMatrix();
     
-    if(mainCharacter.hitTest(speed)) exit(0);
+    if(hitTest(speedX[0], speedZ[0])) exit(0);
+    //cout <<  << endl;
 
     glutSwapBuffers();
 	glutPostRedisplay();

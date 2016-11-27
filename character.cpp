@@ -1,23 +1,17 @@
 #include "header.h"
 #include "character.h"
-#include "box.h"
+
 
 float charLoc[] = {0, 0, 10};
 
+
 Character::Character(){ }
-
-
-bool Character::hitTest(Box box){
-	if((box.getX() <= (charLoc[0] - 25) && box.getX() >= (charLoc[0] + 25)) && (box.getZ() <= (charLoc[2] - 25) && box.getZ() >= (charLoc[2] + 25))) return true;
-	else return false;
-}
 
 
 void Character::drawCharacter(float* pos, float* rot, float gameSpeed){
 	glPushMatrix();
 
 	pos[2] = pos[2] - gameSpeed;
-	for(int i=0;i<3;i++) charLoc[i] = pos[i];
 
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glRotatef(rot[1], 0, 1, 0);
