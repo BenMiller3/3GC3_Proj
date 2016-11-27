@@ -3,53 +3,59 @@
 #include "box.h"
 #include "scene.h"
 
-// Camera Values
-float pos[] = {0,0,10};
-float rot[] = {0, 0, 0};
-float camPos[] = {0, 10, 15};
+
+//Character Position
+float charPos[] = {0, 0, 10};
+float charRot[] = {0, 0, 0};
+
 
 //Character Movement
-float angle = 0.0f;
-float spd = 0.003f;
+float charAngle = 0.0f;
+float charSpeed = 0.003f;
 
-// @Karim rather than shift for speed when player
-// hits the box we will make them fast and 
-// not have them have to use the shift bar at all
-float slow = 0.3f;
-float fast = 0.5f;
 
-//Location of the world
-float zLocation = -5.0f;
-float gameSpeed = 0.05f;
+//Speed Powerup
+bool speedActive = true; //True when it is active
+int totalSpeedBoxes = 20; //Total number of boxes per loop
+int speedX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int speedZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
 
-// World
-Scene theWorld = Scene();
 
-// Character
-Character mainCharacter = Character();
+//Shield Powerup
+bool shieldActive = true; //True when it is active
+int totalShieldBoxes = 20; //Total number of boxes per loop
+int shieldX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int shieldZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
 
-//Powerups
-Box items = Box();
-bool spdPowerup = true;
-bool shieldPowerup = true;
 
-// Total Speed and Shield boxes per loop
-int totalSpeed = 20;
-int totalShield = 20;
-
-// X and Z locations of all speed blocks ** MUST be the same as totalSpeed & totalShield 
-int speedX [20];
-int speedZ [20];
-
-int shieldX [20];
-int shieldZ [20];
-
-// Sets initial powerup locations
+//Initial Powerup location
 bool setPowerups = false;
 
-//Smooth Keyboard movements
+
+//World Position
+float zLocation = -5.0f;
+
+
+//Camera Position
+float camPos[] = {0, 10, 15};
+
+
+//Speeds
+float slow = 0.3f;
+float fast = 0.5f;
+float gameSpeed = 0.05f;
+
+
+//Smooth Character Movement Animation
 bool leftPressed = false;
 bool rightPressed = false;
+
+
+Scene theWorld = Scene();
+Character mainCharacter = Character();
+Box speed = Box(0);
+Box shield = Box(1);
+
 
 void keyboard(unsigned char key, int xIn, int yIn){
 	switch(key){
@@ -64,23 +70,18 @@ void keyboard(unsigned char key, int xIn, int yIn){
 			rightPressed = true;
 			break;
 	}
-
 	glutPostRedisplay();	
 }
 
-// Needed for smooth keyboard callbacks
+
+//Smooth Character Movement Animation
 void keyUp(unsigned char key, int x, int y){
-	if(key=='a'){
-		leftPressed = false;
-	}
-	else if(key=='d'){
-		rightPressed = false;
-	}
+	if(key == 'a') leftPressed = false;
+	else if(key == 'd') rightPressed = false;
 }
 
-void special(int key, int x, int y){
-	int mod = glutGetModifiers();
 
+void special(int key, int x, int y){
 	switch(key){
 		case GLUT_KEY_LEFT:
 			leftPressed = true;
@@ -93,14 +94,13 @@ void special(int key, int x, int y){
 	glutPostRedisplay();
 }
 
+
+//Smooth Character Movement Animation
 void specialUp(int key, int x, int y){
-	if(key == GLUT_KEY_RIGHT){
-		rightPressed = false;
-	}
-	else if(key == GLUT_KEY_LEFT){
-		leftPressed = false;
-	}
+	if(key == GLUT_KEY_RIGHT) rightPressed = false;
+	else if(key == GLUT_KEY_LEFT) leftPressed = false;
 }
+
 
 void init(void){
 	glClearColor(0, 0.68, 0.146, 0);	
@@ -110,96 +110,90 @@ void init(void){
 	gluPerspective(45, 1, 1, 100);
 }
 
+
 void display(void){
-
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
-	glColor3f(0, 0, 0);
 
 	glTranslatef(0.0f, 0.0f, zLocation);
-
 	zLocation += gameSpeed;
 
 	if(zLocation >= 205.0f || setPowerups == false){
 		zLocation = -5.0f;
 
-		// Generate new locations for speed blocks
-		for(int i = 0; i<totalSpeed; i++){
-			speedX[i] = items.genLocation(9);
-			speedZ[i] = items.genLocation(200);
+		//Generate new locations for speed blocks
+		for(int i=0;i<totalSpeedBoxes;i++){
+			speedX[i] = speed.genLocation(9);
+			speedZ[i] = speed.genLocation(200);
 		}
 
-		// Generate new locations for shield blocks
-		for(int i = 0; i<totalShield; i++){
-			shieldX[i] = items.genLocation(9);
-			shieldZ[i] = items.genLocation(200);
+		//Generate new locations for shield blocks
+		for(int i=0;i<totalShieldBoxes;i++){
+			shieldX[i] = shield.genLocation(9);
+			shieldZ[i] = shield.genLocation(200);
 		}
-		if(setPowerups==false){
+
+		if(setPowerups == false){
 			setPowerups = true;
-			mainCharacter.drawCharacter(pos,rot,+210.0f);
+			mainCharacter.drawCharacter(charPos, charRot, 210.0f);
 		}
 
         glPushMatrix();
-            mainCharacter.drawCharacter(pos,rot,-210.0f);
+            mainCharacter.drawCharacter(charPos, charRot, -210.0f);
         glPopMatrix();
 	}
 
-	// Draw road
+	//Draw road
     glPushMatrix();
         theWorld.drawRoad(zLocation);
     glPopMatrix();
 
-	// Draw Assets
+	//Draw Assets
     glPushMatrix();
-        mainCharacter.drawCharacter(pos,rot,gameSpeed);
-    glPopMatrix();
-    glPushMatrix();
-    	// Draw speed and shield blocks from random locations
-        for(int i = 0; i<totalShield; i++){
-        	items.drawSpeedPU(speedX[i],speedZ[i]);
-        }
-
-    	for(int i = 0; i<totalSpeed; i++){
-    		items.drawShieldPU(shieldX[i],shieldZ[i]);
-    	}
+        mainCharacter.drawCharacter(charPos,charRot,gameSpeed);
     glPopMatrix();
 
-    // Move the character
-    if(leftPressed == true && pos[0] > -4.4){
-    	pos[0] -= spd;
-		rot[1] = -90;
+    //Draw speed and shield boxes at random locations
+    glPushMatrix();
+        for(int i=0;i<totalSpeedBoxes;i++) speed.drawSpeed(speedX[i], speedZ[i]);
+
+    	for(int i=0;i<totalShieldBoxes;i++) shield.drawShield(shieldX[i], shieldZ[i]);
+    glPopMatrix();
+
+    //Move the character
+    if(leftPressed == true && charPos[0] > -4.4){
+    	charPos[0] -= charSpeed;
+		charRot[1] = -90;
     }
     
-    if(rightPressed == true && pos[0] < 4.4){
-    	pos[0] += spd;
-    	rot[1] = 90;
+    if(rightPressed == true && charPos[0] < 4.4){
+    	charPos[0] += charSpeed;
+    	charRot[1] = 90;
     }
     
     //lighting
     glPushMatrix();
         glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
-        float pos1[] = {10,1,1,0};
-        float amb1[4] = {0.4f,0.4f,0.4f,1};
+        glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        float pos1[] = {10, 1, 1, 0};
+        float amb1[4] = {0.4f, 0.4f, 0.4f, 1};
         float diff1[4] = {1, 1, 1, 1};
         float spec1[4] = {1, 1, 1, 1};
         glEnable(GL_LIGHTING);
-        //turn on light bulb 0
+
+        //Turn on light bulb 0
         glEnable(GL_LIGHT0);
         glLightfv(GL_LIGHT0, GL_DIFFUSE, diff1);
         glLightfv(GL_LIGHT0, GL_POSITION, pos1);
         glLightfv(GL_LIGHT0, GL_SPECULAR, spec1);
         glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
-        glPopMatrix();
+    glPopMatrix();
     
     glutSwapBuffers();
 	glutPostRedisplay();
     glFlush();
-
 }
 
 
@@ -222,6 +216,5 @@ int main(int argc, char** argv){
 
 	init();
 	glutMainLoop();	
-
 	return(0);
 }
