@@ -1,6 +1,6 @@
 #include "header.h"
 #include "character.h"
-#include "powerup.h"
+#include "box.h"
 #include "scene.h"
 
 // Camera Values
@@ -29,7 +29,7 @@ Scene theWorld = Scene();
 Character mainCharacter = Character();
 
 //Powerups
-Powerup items = Powerup();
+Box items = Box();
 bool spdPowerup = true;
 bool shieldPowerup = true;
 
