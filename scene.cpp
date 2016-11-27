@@ -1,5 +1,5 @@
-#include "scene.h"
 #include "header.h"
+#include "scene.h"
 
 Scene::Scene(){
 	
