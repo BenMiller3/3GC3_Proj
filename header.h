@@ -8,5 +8,6 @@
 #  include <GL/freeglut.h>
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <math.h>
+#include <iostream>
+using namespace std;

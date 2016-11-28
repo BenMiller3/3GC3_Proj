@@ -1,8 +1,5 @@
 #include "header.h"
 #include "box.h"
-#include <ctime>
-#include <cstdlib>
-#include <iostream>
 
 
 int n = 10; //Number of boxes generated per loop (treadmill reset)
@@ -47,10 +44,15 @@ void drawCuboid(float* c, float w, float h, float d){
 }
 
 
-int Box::genLocation(int range){
+int Box::genX(int range){
 	int x1 = rand()%(range)+1;
 	int x2 = (rand()%range + 1) * (-1);
 	return x2 + x1;
+}
+
+int Box::genZ(int range){
+	int x = (rand()%range + 1) * (-1);
+	return x;
 }
 
 

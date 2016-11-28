@@ -2,9 +2,6 @@
 #include "character.h"
 #include "box.h"
 #include "scene.h"
-#include <math.h>
-#include <iostream>
-using namespace std;
 
 
 //Character Position
@@ -22,6 +19,7 @@ bool speedActive = true; //True when it is active
 int totalSpeedBoxes = 20; //Total number of boxes per loop
 int speedX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
 int speedZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualSpeedZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Shield Powerup
@@ -62,8 +60,13 @@ Box shield = Box(1);
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx <= 2) && z >= 10) return true;
+	if(abs(dx) <= 1 && (z >= 10 && z < 15 )) return true;
 	else return false;
+}
+
+
+void playSong(){
+
 }
 
 
@@ -135,14 +138,15 @@ void display(void){
 
 		//Generate new locations for speed blocks
 		for(int i=0;i<totalSpeedBoxes;i++){
-			speedX[i] = speed.genLocation(9);
-			speedZ[i] = speed.genLocation(200);
+			speedX[i] = speed.genX(9);
+			speedZ[i] = speed.genZ(200);
+			actualSpeedZ[i] = speedZ[i];
 		}
 
 		//Generate new locations for shield blocks
 		for(int i=0;i<totalShieldBoxes;i++){
-			shieldX[i] = shield.genLocation(9);
-			shieldZ[i] = shield.genLocation(200);
+			shieldX[i] = shield.genX(9);
+			shieldZ[i] = shield.genZ(200);
 		}
 
 		if(setPowerups == false){
@@ -201,8 +205,10 @@ void display(void){
         glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
     glPopMatrix();
     
-    if(hitTest(speedX[0], speedZ[0])) exit(0);
-    //cout <<  << endl;
+    for(int i=0;i<totalSpeedBoxes;i++){
+    	actualSpeedZ[i] += boxSpeed;
+    	if(hitTest(speedX[i], actualSpeedZ[i])) exit(0);
+    }
 
     glutSwapBuffers();
 	glutPostRedisplay();

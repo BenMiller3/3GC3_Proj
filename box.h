@@ -9,7 +9,8 @@ public:
 	Box(int type);
 	void drawSpeed(int x, int z);
 	void drawShield(int x, int z);
-	int genLocation(int range);
+	int genX(int range);
+	int genZ(int range);
 };
 
 #endif
