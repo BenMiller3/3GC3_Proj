@@ -27,6 +27,7 @@ bool shieldActive = true; //True when it is active
 int totalShieldBoxes = 20; //Total number of boxes per loop
 int shieldX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
 int shieldZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualShieldZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Initial Powerup location
@@ -60,7 +61,7 @@ Box shield = Box(1);
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 1 && (z >= 10 && z < 15 )) return true;
+	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)) return true;
 	else return false;
 }
 
@@ -147,6 +148,7 @@ void display(void){
 		for(int i=0;i<totalShieldBoxes;i++){
 			shieldX[i] = shield.genX(9);
 			shieldZ[i] = shield.genZ(200);
+			actualShieldZ[i] = shieldZ[i];
 		}
 
 		if(setPowerups == false){
@@ -172,7 +174,6 @@ void display(void){
     //Draw speed and shield boxes at random locations
     glPushMatrix();
         for(int i=0;i<totalSpeedBoxes;i++) speed.drawSpeed(speedX[i], speedZ[i]);
-
     	for(int i=0;i<totalShieldBoxes;i++) shield.drawShield(shieldX[i], shieldZ[i]);
     glPopMatrix();
 
@@ -207,7 +208,16 @@ void display(void){
     
     for(int i=0;i<totalSpeedBoxes;i++){
     	actualSpeedZ[i] += boxSpeed;
-    	if(hitTest(speedX[i], actualSpeedZ[i])) exit(0);
+    	if(hitTest(speedX[i], actualSpeedZ[i])){
+    		speedZ[i] = 20;
+    	}
+    }
+
+    for(int i=0;i<totalShieldBoxes;i++){
+    	actualShieldZ[i] += boxSpeed;
+    	if(hitTest(shieldX[i], actualShieldZ[i])){
+    		shieldZ[i] = 20;
+    	}
     }
 
     glutSwapBuffers();
