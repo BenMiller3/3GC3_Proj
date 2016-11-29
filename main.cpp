@@ -2,7 +2,14 @@
 #include "character.h"
 #include "box.h"
 #include "scene.h"
+#include <iostream>
 
+/*
+Blue boxes = bad
+Green boxes = good;
+
+Collect too many blue boxes and the game will end.
+*/
 
 //Character Position
 float charPos[] = {0, 0, 10};
@@ -11,15 +18,15 @@ float charRot[] = {0, 0, 0};
 
 //Character Movement
 float charAngle = 0.0f;
-float charSpeed = 0.15f; //@Ben: 0.003f
+float charSpeed = 0.15f; //@Ben: 0.008f
 
 
 //Speed Powerup
 bool speedActive = true; //True when it is active
-int totalSpeedBoxes = 20; //Total number of boxes per loop
-int speedX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int speedZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualSpeedZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+int totalSpeedBoxes = 40; //Total number of boxes per loop
+int speedX [40]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int speedZ [40]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualSpeedZ [40]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Shield Powerup
@@ -45,12 +52,15 @@ float camPos[] = {0, 10, 15};
 //Speeds
 float slow = 0.3f;
 float fast = 0.5f;
-float boxSpeed = 0.2f; //@Ben: 0.05f
+float boxSpeed = 0.2f; //@Ben: 0.06f
 
 
 //Smooth Character Movement Animation
 bool leftPressed = false;
 bool rightPressed = false;
+
+// Score Variables
+int score = 300;
 
 
 Scene theWorld = Scene();
@@ -61,13 +71,24 @@ Box shield = Box(1);
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)) return true;
+	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)) {
+		// Output the current score after each collision. Will be displayed at top of screen 
+		cout << "SCORE: " << round(score/30);
+		// if "score -- current lives/healthbar" reaches zero then the game ends.
+		if(score <= 0) exit(0);
+		return true;
+	}
 	else return false;
 }
 
 
 void playSong(){
 
+}
+
+int updateScore(int score, bool effect){
+	if(effect) return score+=1;
+	else return score-=1;
 }
 
 
@@ -157,7 +178,7 @@ void display(void){
 		}
 
         glPushMatrix();
-            mainCharacter.drawCharacter(charPos, charRot, -210.0f);
+            mainCharacter.drawCharacter(charPos, charRot, -210.2f);
         glPopMatrix();
 	}
 
@@ -206,10 +227,13 @@ void display(void){
         glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
     glPopMatrix();
     
+    // Collision detection
     for(int i=0;i<totalSpeedBoxes;i++){
     	actualSpeedZ[i] += boxSpeed;
     	if(hitTest(speedX[i], actualSpeedZ[i])){
     		speedZ[i] = 20;
+    		score = updateScore(score,false);
+    		break;
     	}
     }
 
@@ -217,6 +241,8 @@ void display(void){
     	actualShieldZ[i] += boxSpeed;
     	if(hitTest(shieldX[i], actualShieldZ[i])){
     		shieldZ[i] = 20;
+    		score = updateScore(score,true);
+    		break;
     	}
     }
 
