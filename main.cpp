@@ -68,12 +68,21 @@ bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
 	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)){
 		//Output the current score after each collision. Will be displayed at top of screen 
-		cout << "SCORE: " << round(score / 30) << endl;
+		cout << "SCORE: " << round(score) << endl;
 		//if "score - current lives/healthbar" reaches zero then the game ends.
 		if(score <= 0) exit(0);
 		return true;
 	}
 	else return false;
+}
+
+
+int updateScore(int score, bool effect){
+	if(effect){
+		if(score >= 300) return score;
+		else return score += 1;
+	}
+	else return score -= 1;
 }
 
 
@@ -217,7 +226,7 @@ void display(void){
     	actualCollectZ[i] += boxSpeed;
     	if(hitTest(collectX[i], actualCollectZ[i])){
     		collectZ[i] = 20;
-    		score = score - 1;
+    		score = updateScore(score, false);
     	}
     }
 
@@ -225,7 +234,7 @@ void display(void){
     	actualAvoidZ[i] += boxSpeed;
     	if(hitTest(avoidX[i], actualAvoidZ[i])){
     		avoidZ[i] = 20;
-    		score = score + 1;
+    		score = updateScore(score, true);
     	}
     }
 
