@@ -63,6 +63,15 @@ Character mainCharacter = Character();
 Box collect = Box();
 Box avoid = Box();
 
+void displayText( float x, float y, float z, const char *string ) {
+	int j = strlen( string );
+ 
+	glColor3f(0,0,0);
+	glRasterPos3f( x, y , z);
+	for( int i = 0; i < j; i++ ) {
+		glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, string[i] );
+	}
+}
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
@@ -145,7 +154,7 @@ void display(void){
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
+	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);	
 
 	glTranslatef(0.0f, 0.0f, zLocation);
 	zLocation += boxSpeed;
@@ -180,6 +189,11 @@ void display(void){
 	//Draw road
     glPushMatrix();
         theWorld.drawRoad(zLocation);
+    glPopMatrix();
+
+	// Draw text
+	glPushMatrix();
+    	displayText(-6,6,-zLocation, "Score: ");
     glPopMatrix();
 
 	//Draw Assets
