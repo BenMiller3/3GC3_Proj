@@ -1,72 +1,169 @@
 #include "header.h"
 #include "character.h"
 
+#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <list>
+#include <vector>
 
-float charLoc[] = {0, 0, 10};
+#ifdef __APPLE__
+#  include <OpenGL/gl.h>
+#  include <OpenGL/glu.h>
+#  include <GLUT/glut.h>
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#  include <GL/freeglut.h>
+#endif
 
+/* Colours */
+float blue[] = {0.132, 0.112, 0.255};
+float red[] = { 0.205, 0.091, 0.069};
+float black[] = {0, 0, 0};
+float skin[] = {0.96, 0.80, 0.69};
+float wood[] = {0.52, 0.37, 0.26};
 
 Character::Character(){ }
 
 
 void Character::drawCharacter(float* pos, float* rot, float gameSpeed){
-	glPushMatrix();
-
-	pos[2] = pos[2] - gameSpeed;
-
-	glTranslatef(pos[0], pos[1], pos[2]);
-	glRotatef(rot[1], 0, 1, 0);
-
-	//draw body
-	glColor3f(1,1,1);
-	glutSolidSphere(1, 16, 16);
-
-	//draw buttons
-	glPushMatrix();
-	glTranslatef(0, 0.35, 0.9);
-	glColor3f(0, 0, 0);
-	glutSolidSphere(0.1, 10, 10);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0, 0.15, 0.95);
-	glColor3f(0, 0, 0);
-	glutSolidSphere(0.1, 10, 10);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0, -0.05, 0.95);
-	glColor3f(0, 0, 0);
-	glutSolidSphere(0.1, 10, 10);
-	glPopMatrix();
-
-
-	glPushMatrix();
-	//translate relative to body, and draw head
-	glTranslatef(0, 1.25, 0);
-	glColor3f(1,1,1);
-	glutSolidSphere(0.5, 16, 16);
-	
-	//translate and draw right eye
-	glPushMatrix();
-	glTranslatef(0.2, 0.15, 0.45);
-	glColor3f(0,0,0);
-	glutSolidSphere(0.1, 10, 10);
-	glPopMatrix();
-
-	//translate and draw left eye
-	glPushMatrix();
-	glTranslatef(-0.2, 0.15, 0.45);
-	glColor3f(0,0,0);
-	glutSolidSphere(0.1, 10, 10);
-	glPopMatrix();
-
-	//translate and draw nose
-	glPushMatrix();
-	glTranslatef(0, 0, 0.5);
-	glColor3f(1,0.4,0);
-	glutSolidSphere(0.1, 10, 10);
-	glPopMatrix();
-
-	glPopMatrix();//body
-	glPopMatrix();//snowman
+    glPushMatrix();
+    pos[2] = pos[2] - gameSpeed;
+    
+    //character
+    glTranslatef(pos[0], pos[1], pos[2]);   //starting postion
+    glRotatef(90, 0, 1, 0); //turned around
+    
+    //skateboard
+    glPushMatrix();
+    
+    //wheel 1
+    glPushMatrix();
+    glColor3fv(black);
+    glTranslatef(-0.5,-3.1,0.1);
+    glScalef(0.1,0.1,0.1);
+    glutSolidSphere(1,10,10);
+    glPopMatrix();
+    
+    //wheel 2
+    glPushMatrix();
+    glColor3fv(black);
+    glTranslatef(0.5,-3.1,0.1);
+    glScalef(0.1,0.1,0.1);
+    glutSolidSphere(1,10,10);
+    glPopMatrix();
+    
+    //wheel 3
+    glPushMatrix();
+    glColor3fv(black);
+    glTranslatef(-0.5,-3.1,-0.33);
+    glScalef(0.1,0.1,0.1);
+    glutSolidSphere(1,10,10);
+    glPopMatrix();
+    
+    //wheel 4
+    glPushMatrix();
+    glColor3fv(black);
+    glTranslatef(0.5,-3.1,-0.33);
+    glScalef(0.1,0.1,0.1);
+    glutSolidSphere(1,10,10);
+    glPopMatrix();
+    
+    //board
+    glPushMatrix();
+    glColor3fv(wood);
+    glTranslatef(0,-3,-0.1);
+    glScalef(1.4,0.2,0.5);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    glPopMatrix();
+    
+    //right leg
+    glPushMatrix();
+    glColor3fv(blue);
+    glTranslatef(0.3, -1.8 , 0);
+    glScalef(0.2,2.5,0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //right shoe
+    glPushMatrix();
+    glColor3fv(black);
+    glTranslatef(0.3, -3 , -0.1);
+    glScalef(0.3,0.2,0.4);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //left leg
+    glPushMatrix();
+    glColor3fv(blue);
+    glTranslatef(-0.3, -1.8 , 0);
+    glScalef(0.2,2.5,0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //left shoe
+    glPushMatrix();
+    glColor3fv(black);
+    glTranslatef(-0.3, -3 , -0.1);
+    glScalef(0.3,0.2,0.4);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //right arm
+    glPushMatrix();
+    glColor3fv(red);
+    glTranslatef(0.8, 0 ,0);
+    glRotatef(45, 0, 0 , 1);
+    glScalef(0.2,1.5,0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //body
+    glPushMatrix();
+    glColor3fv(red);
+    glScalef(0.6,1.5,0.3);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //left arm
+    glPushMatrix();
+    glColor3fv(red);
+    glTranslatef(-0.8, 0 , 0.0);
+    glRotatef(-45, 0, 0 , 1);
+    glScalef(0.2,1.5,0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //Head
+    glPushMatrix();
+    glTranslatef(0, 1.5, 0);
+    glColor3fv(skin);
+    glScalef(1,1,0.5);
+    glutSolidSphere(0.5, 10, 10);
+    glPopMatrix();
+    
+    //hat top
+    glPushMatrix();
+    glColor3fv(red);
+    glTranslatef(0, 1.9, -0.3);
+    glScalef(0.6,0.2,0.4);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    //hat base
+    glPushMatrix();
+    glColor3fv(red);
+    glTranslatef(0, 2 , 0);
+    glScalef(0.6,0.4,0.5);
+    glutSolidCube(1);
+    glPopMatrix();
+    
+    
+    glPopMatrix();
+    
+    
 }
