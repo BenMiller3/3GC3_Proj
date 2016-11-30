@@ -2,7 +2,6 @@
 #include "character.h"
 #include "box.h"
 #include "scene.h"
-#include <iostream>
 
 /*
 Blue boxes = bad
@@ -59,7 +58,7 @@ float boxSpeed = 0.2f; //@Ben: 0.06f
 bool leftPressed = false;
 bool rightPressed = false;
 
-// Score Variables
+//Score Variable
 int score = 300;
 
 
@@ -71,10 +70,10 @@ Box shield = Box(1);
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)) {
-		// Output the current score after each collision. Will be displayed at top of screen 
-		cout << "SCORE: " << round(score/30);
-		// if "score -- current lives/healthbar" reaches zero then the game ends.
+	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)){
+		//Output the current score after each collision. Will be displayed at top of screen 
+		cout << "SCORE: " << round(score / 30) << endl;
+		//if "score - current lives/healthbar" reaches zero then the game ends.
 		if(score <= 0) exit(0);
 		return true;
 	}
@@ -82,13 +81,9 @@ bool hitTest(int x, int z){
 }
 
 
-void playSong(){
-
-}
-
 int updateScore(int score, bool effect){
-	if(effect) return score+=1;
-	else return score-=1;
+	if(effect) return score += 1;
+	else return score -= 1;
 }
 
 
@@ -232,8 +227,7 @@ void display(void){
     	actualSpeedZ[i] += boxSpeed;
     	if(hitTest(speedX[i], actualSpeedZ[i])){
     		speedZ[i] = 20;
-    		score = updateScore(score,false);
-    		break;
+    		score = updateScore(score, false);
     	}
     }
 
@@ -241,8 +235,7 @@ void display(void){
     	actualShieldZ[i] += boxSpeed;
     	if(hitTest(shieldX[i], actualShieldZ[i])){
     		shieldZ[i] = 20;
-    		score = updateScore(score,true);
-    		break;
+    		score = updateScore(score, true);
     	}
     }
 
@@ -256,8 +249,8 @@ int main(int argc, char** argv){
 	glutInit(&argc, argv); 	
 	glutInitDisplayMode(GLUT_RGBA);	
 
-	glutInitWindowPosition(50,50);
-	glutInitWindowSize(640,480);
+	glutInitWindowPosition(50, 50);
+	glutInitWindowSize(640, 480);
 
 	glutCreateWindow("3GC3 Final Project");
     glMatrixMode(GL_PROJECTION);
