@@ -77,7 +77,7 @@ bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
 	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)){
 		//Output the current score after each collision. Will be displayed at top of screen 
-		cout << "SCORE: " << round(score) << endl;
+		//cout << "SCORE: " << round(score) << endl;
 		return true;
 	}
 	else return false;
@@ -191,9 +191,15 @@ void display(void){
         theWorld.drawRoad(zLocation);
     glPopMatrix();
 
+    std::ostringstream oss;
+    oss << "Health: " << round(score/3) << " pts" << "	Score: " << clock()/1000000 << endl;
+
+    std::cout << oss.str();
+
 	// Draw text
 	glPushMatrix();
-    	displayText(-6,6,-zLocation, "Score: ");
+    	displayText(-6,6,-zLocation, "Health: 100 pts");
+    	displayText(2.8, 6.0, -zLocation, "Score: 0");
     glPopMatrix();
 
 	//Draw Assets
