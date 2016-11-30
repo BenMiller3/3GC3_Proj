@@ -3,12 +3,9 @@
 
 
 int n = 10; //Number of boxes generated per loop (treadmill reset)
-int type; //Type of box
 float boxLoc[] = {0, 0, 0};
 
-Box::Box(int typeAssigned){
-	type = typeAssigned;
-}
+Box::Box(){ }
 
 
 void drawPolygon(int a, int b, int c, int d, float v[8][3]){
@@ -56,15 +53,15 @@ int Box::genZ(int range){
 }
 
 
-void Box::drawSpeed(int xLocation, int zLocation){
-	glColor3f(0, 0, 1);
+void Box::drawCollect(int xLocation, int zLocation){
+	glColor3f(0, 0, 0);
 	boxLoc[0] = xLocation;
 	boxLoc[2] = zLocation;
 	drawCuboid(boxLoc, 1, 1, 1);
 }
 
 
-void Box::drawShield(int xLocation, int zLocation){
+void Box::drawAvoid(int xLocation, int zLocation){
 	glColor3f(0, 1, 0);
 	boxLoc[0] = xLocation;
 	boxLoc[2] = zLocation;

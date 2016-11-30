@@ -6,9 +6,9 @@
 class Box{
 
 public:
-	Box(int type);
-	void drawSpeed(int x, int z);
-	void drawShield(int x, int z);
+	Box();
+	void drawCollect(int x, int z);
+	void drawAvoid(int x, int z);
 	int genX(int range);
 	int genZ(int range);
 };

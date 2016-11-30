@@ -20,20 +20,18 @@ float charAngle = 0.0f;
 float charSpeed = 0.15f; //@Ben: 0.008f
 
 
-//Speed Powerup
-bool speedActive = true; //True when it is active
-int totalSpeedBoxes = 40; //Total number of boxes per loop
-int speedX [40]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int speedZ [40]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualSpeedZ [40]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+//Boxes to collect
+int totalCollectBoxes = 40; //Total number of boxes per loop
+int collectX [40]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int collectZ [40]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualCollectZ [40]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
-//Shield Powerup
-bool shieldActive = true; //True when it is active
-int totalShieldBoxes = 20; //Total number of boxes per loop
-int shieldX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int shieldZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualShieldZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+//Boxes to avoid
+int totalAvoidBoxes = 20; //Total number of boxes per loop
+int avoidX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int avoidZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualAvoidZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Initial Powerup location
@@ -48,9 +46,7 @@ float zLocation = -5.0f;
 float camPos[] = {0, 10, 15};
 
 
-//Speeds
-float slow = 0.3f;
-float fast = 0.5f;
+//Speed
 float boxSpeed = 0.2f; //@Ben: 0.06f
 
 
@@ -64,8 +60,8 @@ int score = 300;
 
 Scene theWorld = Scene();
 Character mainCharacter = Character();
-Box speed = Box(0);
-Box shield = Box(1);
+Box collect = Box();
+Box avoid = Box();
 
 
 bool hitTest(int x, int z){
@@ -78,12 +74,6 @@ bool hitTest(int x, int z){
 		return true;
 	}
 	else return false;
-}
-
-
-int updateScore(int score, bool effect){
-	if(effect) return score += 1;
-	else return score -= 1;
 }
 
 
@@ -153,18 +143,18 @@ void display(void){
 	if(zLocation >= 205.0f || setPowerups == false){
 		zLocation = -5.0f;
 
-		//Generate new locations for speed blocks
-		for(int i=0;i<totalSpeedBoxes;i++){
-			speedX[i] = speed.genX(9);
-			speedZ[i] = speed.genZ(200);
-			actualSpeedZ[i] = speedZ[i];
+		//Generate new locations for collect blocks
+		for(int i=0;i<totalCollectBoxes;i++){
+			collectX[i] = collect.genX(9);
+			collectZ[i] = collect.genZ(200);
+			actualCollectZ[i] = collectZ[i];
 		}
 
-		//Generate new locations for shield blocks
-		for(int i=0;i<totalShieldBoxes;i++){
-			shieldX[i] = shield.genX(9);
-			shieldZ[i] = shield.genZ(200);
-			actualShieldZ[i] = shieldZ[i];
+		//Generate new locations for avoid blocks
+		for(int i=0;i<totalAvoidBoxes;i++){
+			avoidX[i] = avoid.genX(9);
+			avoidZ[i] = avoid.genZ(200);
+			actualAvoidZ[i] = avoidZ[i];
 		}
 
 		if(setPowerups == false){
@@ -187,10 +177,10 @@ void display(void){
         mainCharacter.drawCharacter(charPos, charRot, boxSpeed);
     glPopMatrix();
 
-    //Draw speed and shield boxes at random locations
+    //Draw collect and avoid boxes at random locations
     glPushMatrix();
-        for(int i=0;i<totalSpeedBoxes;i++) speed.drawSpeed(speedX[i], speedZ[i]);
-    	for(int i=0;i<totalShieldBoxes;i++) shield.drawShield(shieldX[i], shieldZ[i]);
+        for(int i=0;i<totalCollectBoxes;i++) collect.drawCollect(collectX[i], collectZ[i]);
+    	for(int i=0;i<totalAvoidBoxes;i++) avoid.drawAvoid(avoidX[i], avoidZ[i]);
     glPopMatrix();
 
     //Move the character
@@ -223,19 +213,19 @@ void display(void){
     glPopMatrix();
     
     // Collision detection
-    for(int i=0;i<totalSpeedBoxes;i++){
-    	actualSpeedZ[i] += boxSpeed;
-    	if(hitTest(speedX[i], actualSpeedZ[i])){
-    		speedZ[i] = 20;
-    		score = updateScore(score, false);
+    for(int i=0;i<totalCollectBoxes;i++){
+    	actualCollectZ[i] += boxSpeed;
+    	if(hitTest(collectX[i], actualCollectZ[i])){
+    		collectZ[i] = 20;
+    		score = score - 1;
     	}
     }
 
-    for(int i=0;i<totalShieldBoxes;i++){
-    	actualShieldZ[i] += boxSpeed;
-    	if(hitTest(shieldX[i], actualShieldZ[i])){
-    		shieldZ[i] = 20;
-    		score = updateScore(score, true);
+    for(int i=0;i<totalAvoidBoxes;i++){
+    	actualAvoidZ[i] += boxSpeed;
+    	if(hitTest(avoidX[i], actualAvoidZ[i])){
+    		avoidZ[i] = 20;
+    		score = score + 1;
     	}
     }
 
