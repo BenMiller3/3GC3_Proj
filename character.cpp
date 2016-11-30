@@ -35,6 +35,7 @@ void Character::drawCharacter(float* pos, float* rot, float gameSpeed){
     //character
     glTranslatef(pos[0], pos[1], pos[2]);   //starting postion
     glRotatef(90, 0, 1, 0); //turned around
+    glScalef(1, 0.75, 1);
     
     //skateboard
     glPushMatrix();

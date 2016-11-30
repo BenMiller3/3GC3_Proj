@@ -54,7 +54,7 @@ int Box::genZ(int range){
 
 
 void Box::drawCollect(int xLocation, int zLocation){
-	glColor3f(0, 0, 0);
+	glColor3f(0, 1, 0);
 	boxLoc[0] = xLocation;
 	boxLoc[2] = zLocation;
 	drawCuboid(boxLoc, 1, 1, 1);
@@ -62,7 +62,7 @@ void Box::drawCollect(int xLocation, int zLocation){
 
 
 void Box::drawAvoid(int xLocation, int zLocation){
-	glColor3f(0, 1, 0);
+	glColor3f(0, 0, 0);
 	boxLoc[0] = xLocation;
 	boxLoc[2] = zLocation;
 	drawCuboid(boxLoc, 1, 1, 1);

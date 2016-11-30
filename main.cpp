@@ -21,17 +21,17 @@ float charSpeed = 0.15f; //@Ben: 0.008f
 
 
 //Boxes to collect
-int totalCollectBoxes = 40; //Total number of boxes per loop
-int collectX [40]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int collectZ [40]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualCollectZ [40]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+int totalCollectBoxes = 20; //Total number of boxes per loop
+int collectX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int collectZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualCollectZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Boxes to avoid
-int totalAvoidBoxes = 20; //Total number of boxes per loop
-int avoidX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int avoidZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualAvoidZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+int totalAvoidBoxes = 40; //Total number of boxes per loop
+int avoidX [40]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int avoidZ [40]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualAvoidZ [40]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Initial Powerup location
@@ -63,23 +63,21 @@ Character mainCharacter = Character();
 Box collect = Box();
 Box avoid = Box();
 
-void displayText( float x, float y, float z, const char *string ) {
-	int j = strlen( string );
+
+void displayText(float x, float y, float z, const char *string){
+	int j = strlen(string);
  
-	glColor3f(0,0,0);
-	glRasterPos3f( x, y , z);
-	for( int i = 0; i < j; i++ ) {
-		glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, string[i] );
+	glColor3f(0, 0, 0);
+	glRasterPos3f(x, y, z);
+	for(int i=0;i<j;i++){
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 	}
 }
 
+
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 0.9 && (z > 6.5 && z < 10)){
-		//Output the current score after each collision. Will be displayed at top of screen 
-		//cout << "SCORE: " << round(score) << endl;
-		return true;
-	}
+	if(abs(dx) <= 0.75 && (z > 9 && z < 13)) return true;
 	else return false;
 }
 
@@ -164,7 +162,7 @@ void display(void){
 
 		//Generate new locations for collect blocks
 		for(int i=0;i<totalCollectBoxes;i++){
-			collectX[i] = collect.genX(9);
+			collectX[i] = collect.genX(2);
 			collectZ[i] = collect.genZ(200);
 			actualCollectZ[i] = collectZ[i];
 		}
@@ -202,15 +200,15 @@ void display(void){
     	displayText(2.8, 6.0, -zLocation, "Score: 0");
     glPopMatrix();
 
-	//Draw Assets
-    glPushMatrix();
-        mainCharacter.drawCharacter(charPos, charRot, boxSpeed);
-    glPopMatrix();
-
     //Draw collect and avoid boxes at random locations
     glPushMatrix();
         for(int i=0;i<totalCollectBoxes;i++) collect.drawCollect(collectX[i], collectZ[i]);
     	for(int i=0;i<totalAvoidBoxes;i++) avoid.drawAvoid(avoidX[i], avoidZ[i]);
+    glPopMatrix();
+
+	//Draw Assets
+    glPushMatrix();
+        mainCharacter.drawCharacter(charPos, charRot, boxSpeed);
     glPopMatrix();
 
     //Move the character
@@ -247,15 +245,16 @@ void display(void){
     	actualCollectZ[i] += boxSpeed;
     	if(hitTest(collectX[i], actualCollectZ[i])){
     		collectZ[i] = 20;
-    		score = updateScore(score, false);
+    		score = updateScore(score, true);
     	}
     }
 
     for(int i=0;i<totalAvoidBoxes;i++){
     	actualAvoidZ[i] += boxSpeed;
     	if(hitTest(avoidX[i], actualAvoidZ[i])){
+    		//explodeAvoid(avoidX[i], avoidZ[i]);
     		avoidZ[i] = 20;
-    		score = updateScore(score, true);
+    		score = updateScore(score, false);
     	}
     }
 
