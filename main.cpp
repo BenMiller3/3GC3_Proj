@@ -7,9 +7,11 @@
 #ifdef __APPLE__
 float charSpeed = 0.13f;
 float gameSpeed = 0.3f;
+float acceleration = 0.015f;
 #else
-float charSpeed = 0.008f;
-float gameSpeed = 0.06f;
+float charSpeed = 0.002f;
+float gameSpeed = 0.02f;
+float acceleration = 0.0001f;
 #endif
 
 
@@ -184,7 +186,6 @@ void display(void){
 	zLocation += boxSpeed;
 
 	if(zLocation >= 235.0f || !setPowerups){
-		glClear(GL_DEPTH_BUFFER_BIT);
 		zLocation = -5.0f;
 
 		//Generate new locations for collect blocks
@@ -251,12 +252,12 @@ void display(void){
     if(!rightPressed) charRightAcc = 0.0f;
 
     if(leftPressed && charPos[0] > -4.8){
-    	charLeftAcc -= 0.015;
+    	charLeftAcc -= acceleration;
     	charPos[0] -= (charSpeed - charLeftAcc);
     }
     
     if(rightPressed && charPos[0] < 4.8){
-    	charRightAcc += 0.015;
+    	charRightAcc += acceleration;
     	charPos[0] += (charSpeed + charRightAcc);
     }
     
@@ -303,6 +304,7 @@ void display(void){
 
 
 int main(int argc, char** argv){
+	srand(time(NULL));
 	glutInit(&argc, argv); 	
 	glutInitDisplayMode(GLUT_RGBA);	
 
