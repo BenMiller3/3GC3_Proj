@@ -12,6 +12,12 @@ float charRot[] = {0, 0, 0};
 float charAngle = 0.0f;
 float charSpeed = 0.15f; //@Ben: 0.008f
 
+//Speed
+float boxSpeed = 0.06f;//0.2f; //@Ben: 0.06f
+
+// CLOCK -- for scoring
+float pauseClock = 0;
+float currentClock = 0;
 
 //Boxes to collect
 int totalCollectBoxes = 20; //Total number of boxes per loop
@@ -38,11 +44,6 @@ float zLocation = -5.0f;
 //Camera Position
 float camPos[] = {0, 10, 15};
 
-
-//Speed
-float boxSpeed = 0.2f; //@Ben: 0.06f
-
-
 //Smooth Character Movement Animation
 bool leftPressed = false;
 bool rightPressed = false;
@@ -50,6 +51,10 @@ bool rightPressed = false;
 //Score Variable
 int score = 300;
 int playerScore = 0;
+
+//Game variables
+bool gamePause = false;
+bool resetGame = false;
 
 
 Scene theWorld = Scene();
@@ -84,6 +89,19 @@ void displayText(float x, float y, float z, const char *string){
 	}
 }
 
+void gameOver(){
+	exit(0);
+}
+
+void pauseGame(){
+	if(gamePause==true){
+		gamePause = false;
+	}
+	else{
+		gamePause = true;	
+	}
+}
+
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
@@ -98,7 +116,7 @@ int updateScore(int score, bool effect){
 		else return score += 1;
 	}
 	else{
-		if(score <= 0) exit(0);
+		if(score <= 0) gameOver();
 		else return score -= 1;
 	}
 }
@@ -111,10 +129,13 @@ void keyboard(unsigned char key, int xIn, int yIn){
 		case 27:
 			exit(0);
 		case 'a':
-			leftPressed = true;
+			if(gamePause == false) leftPressed = true;
 			break;
 		case 'd':
-			rightPressed = true;
+			if(gamePause == false) rightPressed = true;
+			break;
+		case ' ':
+			pauseGame();
 			break;
 	}
 	glutPostRedisplay();	
@@ -129,6 +150,8 @@ void keyUp(unsigned char key, int x, int y){
 
 
 void special(int key, int x, int y){
+	
+	if(gamePause == false){
 	switch(key){
 		case GLUT_KEY_LEFT:
 			leftPressed = true;
@@ -138,6 +161,7 @@ void special(int key, int x, int y){
 			rightPressed = true;
 			break;
 	}
+}
 	glutPostRedisplay();
 }
 
@@ -164,8 +188,16 @@ void display(void){
 	glLoadIdentity();
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);	
 
+	if(gamePause==false){
+		boxSpeed = 0.2f;
+	}
+	else{
+		boxSpeed = 0.0f;
+	}
+
 	glTranslatef(0.0f, 0.0f, zLocation);
 	zLocation += boxSpeed;
+	
 
 	if(zLocation >= 205.0f || setPowerups == false){
 		zLocation = -5.0f;
@@ -221,7 +253,17 @@ void display(void){
     glPopMatrix();
 
     // Score calculated by time
-    playerScore = clock()/1000000;
+    playerScore = (clock() - pauseClock)/100000;
+
+    
+    if(gamePause==true){
+
+    	pauseClock = clock() - currentClock;
+    }
+    else{
+    	currentClock = clock() - pauseClock;
+    }
+
 
     //Parsing text
     char buffer [100];
@@ -277,6 +319,7 @@ void display(void){
     glPopMatrix();
     
     // Collision detection
+    if(gamePause == false){
     for(int i=0;i<totalCollectBoxes;i++){
     	actualCollectZ[i] += boxSpeed;
     	if(hitTest(collectX[i], actualCollectZ[i])){
@@ -292,6 +335,7 @@ void display(void){
     		score = updateScore(score, false);
     	}
     }
+}
 
     glutSwapBuffers();
 	glutPostRedisplay();
