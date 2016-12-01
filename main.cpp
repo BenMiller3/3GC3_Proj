@@ -106,7 +106,7 @@ void pauseGame(){
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 0.6 && (z > 9 && z < 13)) return true;
+	if(abs(dx) <= 0.7 && (z > 9 && z < 13)) return true;
 	else return false;
 }
 
