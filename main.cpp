@@ -80,6 +80,20 @@ int avoidZ[90]; //Z coordinate of the box (MUST be the same as the total number 
 float actualAvoidZ[90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
+void introduction(){
+    cout << "\n\n\nBlock Boarding\n" << endl;
+    cout << "by Victoria Graff, 001401451, graffve\n" << endl;
+    cout << "and Emily Ashworth, 001402976, ashworel \n" << endl;
+    cout << "and Kareem Abdel Mesih, 001407633, abdelk2 \n" << endl;
+    cout << "and Ben Miller, 001416516, millebd  \n\n" << endl;
+    cout << "INSTRUCTIONS:\n\n" << endl;
+    cout << "Use the arrow keys or A and D to move the character left and right\n" << endl;
+    cout << "Avoid black boxes and collect green boxes\n" << endl;
+    cout << "Your score is based on the distance you are able to go\n" << endl;
+    cout << "The green boxes give you health while the black ones take away health\n\n" << endl;
+ }
+
+
 void displayText(float x, float y, float z, const char *string){
 	int j = strlen(string);
 	glColor3f(0, 0, 0);
@@ -320,6 +334,8 @@ int main(int argc, char** argv){
 	glutKeyboardUpFunc(keyUp);
 	glutSpecialFunc(special);
 	glutSpecialUpFunc(specialUp);
+
+	introduction();
 
 	init();
 	glutMainLoop();	

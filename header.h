@@ -12,3 +12,5 @@
 #include <time.h>
 #include <stdio.h>
 #include <ctime>
+#include <iostream>
+using namespace std;
