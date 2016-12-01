@@ -67,3 +67,10 @@ void Box::drawAvoid(int xLocation, int zLocation){
 	boxLoc[2] = zLocation;
 	drawCuboid(boxLoc, 1, 1, 1);
 }
+
+void Box::drawParticles(int xLocation, int yLocation){
+	glColor3f(12, 12, 12);
+	boxLoc[0] = xLocation;
+	boxLoc[2] = yLocation;
+	drawCuboid(boxLoc, 0.25, 0.25, 0.25);
+}
