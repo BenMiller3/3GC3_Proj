@@ -48,7 +48,7 @@ int Box::genX(int range){
 }
 
 int Box::genZ(int range){
-	int x = (rand()%range + 1) * (-1);
+	int x = (rand()%range + 30) * (-1);
 	return x;
 }
 

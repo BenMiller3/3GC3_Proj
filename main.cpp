@@ -205,14 +205,14 @@ void display(void){
 
 		//Generate new locations for collect blocks
 		for(int i=0;i<totalCollectBoxes;i++){
-			collectX[i] = collect.genX(9);
+			collectX[i] = collect.genX(8);
 			collectZ[i] = collect.genZ(200);
 			actualCollectZ[i] = collectZ[i];
 		}
 
 		//Generate new locations for avoid blocks
 		for(int i=0;i<totalAvoidBoxes;i++){
-			avoidX[i] = avoid.genX(9);
+			avoidX[i] = avoid.genX(8);
 			avoidZ[i] = avoid.genZ(200);
 			actualAvoidZ[i] = avoidZ[i];
 		}
@@ -229,19 +229,19 @@ void display(void){
 
 
 	// Smooth the transition between the two waves
-	if(zLocation >= 150.0f){
+	if(zLocation >= 120.0f){
 
 		//Generate new locations for collect blocks
 		for(int i=0;i<totalCollectBoxes2;i++){
 			collectX2[i] = collect2.genX(8);
-			collectZ2[i] = collect2.genZ(75);
+			collectZ2[i] = collect2.genZ(200);
 			actualCollectZ2[i] = collectZ2[i];
 		}
 
 		//Generate new locations for avoid blocks
 		for(int i=0;i<totalAvoidBoxes2;i++){
 			avoidX2[i] = avoid2.genX(8);
-			avoidZ2[i] = avoid2.genZ(75);
+			avoidZ2[i] = avoid2.genZ(200);
 			actualAvoidZ2[i] = avoidZ2[i];
 		}
 
@@ -299,7 +299,7 @@ void display(void){
     	charPos[0] -= (charSpeed - charLeftAcc);
     }
     
-    if(rightPressed == true && charPos[0] < 4.4){
+    if(rightPressed == true && charPos[0] < 4.8){
     	charRightAcc += 0.015;
     	charPos[0] += (charSpeed + charRightAcc);
     }
@@ -354,7 +354,7 @@ int main(int argc, char** argv){
 	glutInitWindowPosition(50, 50);
 	glutInitWindowSize(640, 480);
 
-	glutCreateWindow("3GC3 Final Project");
+	glutCreateWindow("Block Boarding");
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
