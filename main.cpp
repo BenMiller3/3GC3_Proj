@@ -3,13 +3,6 @@
 #include "box.h"
 #include "scene.h"
 
-/*
-Blue boxes = bad
-Green boxes = good;
-
-Collect too many blue boxes and the game will end.
-*/
-
 //Character Position
 float charPos[] = {0, 0, 10};
 float charRot[] = {0, 0, 0};
