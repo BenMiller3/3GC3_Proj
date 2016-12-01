@@ -9,7 +9,6 @@ public:
 	Box();
 	void drawCollect(int x, int z);
 	void drawAvoid(int x, int z);
-	void drawParticles(int x, int y);
 	int genX(int range);
 	int genZ(int range);
 };

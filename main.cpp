@@ -62,7 +62,6 @@ Scene theWorld = Scene();
 Character mainCharacter = Character();
 Box collect = Box();
 Box avoid = Box();
-Box particles = Box();
 
 
 void displayText(float x, float y, float z, const char *string){
@@ -78,35 +77,8 @@ void displayText(float x, float y, float z, const char *string){
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 0.75 && (z > 9 && z < 13)) return true;
+	if(abs(dx) <= 0.7 && (z > 9 && z < 13)) return true;
 	else return false;
-}
-
-void explodeAvoid(int x, int y){
-	float topLeft[3] = {x - 0.125, y + 0.125, 0};
-	float topRight[3] = {x + 0.125, y + 0.125, 0};
-	float bottomLeft[3] = {x - 0.125, y - 0.125, 0};
-	float bottomRight[3] = {x + 0.125, y - 0.125, 0};
-
-	particles.drawParticles(topLeft[0], topLeft[1]);
-	particles.drawParticles(topRight[0], topRight[1]);
-	particles.drawParticles(bottomLeft[0], bottomLeft[1]);
-	particles.drawParticles(bottomRight[0], bottomRight[1]);
-
-	for(int i=0;i<30;i++){
-		topLeft[0] -= 0.2;
-		topLeft[1] += 0.2;
-
-		topRight[0] += 0.2;
-		topRight[1] += 0.2;
-
-		bottomLeft[0] -= 0.2;
-		bottomLeft[1] -= 0.2;
-
-		bottomRight[0] += 0.2;
-		bottomRight[1] -= 0.2;
-	}
-
 }
 
 
@@ -280,7 +252,6 @@ void display(void){
     for(int i=0;i<totalAvoidBoxes;i++){
     	actualAvoidZ[i] += boxSpeed;
     	if(hitTest(avoidX[i], actualAvoidZ[i])){
-    		explodeAvoid(avoidX[i], avoidZ[i]);
     		avoidZ[i] = 20;
     		score = updateScore(score, false);
     	}
