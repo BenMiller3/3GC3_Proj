@@ -3,20 +3,6 @@
 #include "box.h"
 #include "scene.h"
 
-void introduction(){
-    printf("\n\n\nInsert Title here\n");
-    printf("by Victoria Graff, 001401451, graffve\n");
-    printf("and Emily Ashworth, 001402976, ashworel \n");
-    printf("and Kareem... \n");
-    printf("and Ben ....  \n\n");
-    printf("INSTRUCTIONS:\n\n");
-    //feel free to update this as you update the game
-    printf("Use left and right arrow keys to move character left and right\n");
-    printf("Avoid black boxes and collect green boxes\n");
-    printf("Your score is based on the distance you are able to go\n");
-    printf("The green boxes give you health while the black one take away health\n\n");
-}
-
 //Character Position
 float charPos[] = {0, 0, 10};
 
@@ -28,7 +14,7 @@ float charLeftAcc = 0.0f;
 float charRightAcc = 0.0f;
 
 //Speed
-float boxSpeed = 0.06f;//0.2f; //@Ben: 0.06f
+float boxSpeed = 0.3f;//0.2f; //@Ben: 0.06f
 
 // CLOCK -- for scoring
 float pauseClock = 0;
@@ -204,7 +190,7 @@ void display(void){
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);	
 
 	if(gamePause==false){
-		boxSpeed = 0.2f;
+		boxSpeed = 0.3f;
 	}
 	else{
 		boxSpeed = 0.0f;
@@ -243,7 +229,7 @@ void display(void){
 
 
 	// Smooth the transition between the two waves
-	if(zLocation >= 120.0f){
+	if(zLocation >= 500.0f){
 
 		//Generate new locations for collect blocks
 		for(int i=0;i<totalCollectBoxes2;i++){
@@ -362,7 +348,6 @@ void display(void){
 
 
 int main(int argc, char** argv){
-    introduction();
 	glutInit(&argc, argv); 	
 	glutInitDisplayMode(GLUT_RGBA);	
 
