@@ -9,7 +9,7 @@ float charPos[] = {0, 0, 10};
 
 //Character Movement
 float charAngle = 0.0f;
-float charSpeed = 0.1f; //@Ben: 0.008f
+float charSpeed = 0.13f; //@Ben: 0.008f
 float charLeftAcc = 0.0f;
 float charRightAcc = 0.0f;
 
@@ -295,12 +295,12 @@ void display(void){
     if(!rightPressed) charRightAcc = 0.0f;
 
     if(leftPressed == true && charPos[0] > -4.4){
-    	charLeftAcc -= 0.01;
+    	charLeftAcc -= 0.015;
     	charPos[0] -= (charSpeed - charLeftAcc);
     }
     
     if(rightPressed == true && charPos[0] < 4.4){
-    	charRightAcc += 0.01;
+    	charRightAcc += 0.015;
     	charPos[0] += (charSpeed + charRightAcc);
     }
     
