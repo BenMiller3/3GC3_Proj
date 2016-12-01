@@ -3,6 +3,22 @@
 #include "box.h"
 #include "scene.h"
 
+
+void introduction(){
+    printf("\n\n\nInsert Title here\n");
+    printf("by Victoria Graff, 001401451, graffve\n");
+    printf("and Emily Ashworth, 001402976, ashworel \n");
+    printf("and Kareem... \n");
+    printf("and Ben ....  \n\n");
+    printf("INSTRUCTIONS:\n\n");
+    //feel free to update this as you update the game
+    printf("Use left and right arrow keys to move character left and right\n");
+    printf("Avoid black boxes and collect green boxes\n");
+    printf("Your score is based on the distance you are able to go\n");
+    printf("The green boxes give you health while the black one take away health\n\n");
+}
+
+
 //Character Position
 float charPos[] = {0, 0, 10};
 
@@ -348,6 +364,7 @@ void display(void){
 
 
 int main(int argc, char** argv){
+    introduction();
 	glutInit(&argc, argv); 	
 	glutInitDisplayMode(GLUT_RGBA);	
 
