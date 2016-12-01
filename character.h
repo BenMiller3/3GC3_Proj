@@ -8,7 +8,6 @@ class Character{
 public:
 	Character();
 	void drawCharacter(float* pos, float gameSpeed);
-
 };
 
 #endif

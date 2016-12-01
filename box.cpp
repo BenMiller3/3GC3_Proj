@@ -2,8 +2,8 @@
 #include "box.h"
 
 
-int n = 10; //Number of boxes generated per loop (treadmill reset)
 float boxLoc[] = {0, 0, 0};
+
 
 Box::Box(){ }
 

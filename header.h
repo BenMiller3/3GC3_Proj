@@ -8,10 +8,5 @@
 #  include <GL/freeglut.h>
 #endif
 
-#include <math.h>
-#include <iostream>
-#include <stdio.h>
-#include <cstring>
 #include <sstream>
-#include <ctime>
-using namespace std;
+#include <time.h>
