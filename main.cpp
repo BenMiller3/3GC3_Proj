@@ -3,22 +3,6 @@
 #include "box.h"
 #include "scene.h"
 
-
-void introduction(){
-    printf("\n\n\nInsert Title here\n");
-    printf("by Victoria Graff, 001401451, graffve\n");
-    printf("and Emily Ashworth, 001402976, ashworel \n");
-    printf("and Kareem... \n");
-    printf("and Ben ....  \n\n");
-    printf("INSTRUCTIONS:\n\n");
-    //feel free to update this as you update the game
-    printf("Use left and right arrow keys to move character left and right\n");
-    printf("Avoid black boxes and collect green boxes\n");
-    printf("Your score is based on the distance you are able to go\n");
-    printf("The green boxes give you health while the black one take away health\n\n");
-}
-
-
 //Character Position
 float charPos[] = {0, 0, 10};
 
@@ -44,10 +28,10 @@ float actualCollectZ [20]; //Updated Z coordinate of the box (MUST be the same a
 
 
 //Boxes to avoid
-int totalAvoidBoxes = 40; //Total number of boxes per loop
-int avoidX [40]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int avoidZ [40]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualAvoidZ [40]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+int totalAvoidBoxes = 70; //Total number of boxes per loop
+int avoidX [70]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int avoidZ [70]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualAvoidZ [70]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Initial Powerup location
@@ -122,7 +106,7 @@ void pauseGame(){
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 0.7 && (z > 9 && z < 13)) return true;
+	if(abs(dx) <= 0.6 && (z > 9 && z < 13)) return true;
 	else return false;
 }
 
@@ -364,7 +348,6 @@ void display(void){
 
 
 int main(int argc, char** argv){
-    introduction();
 	glutInit(&argc, argv); 	
 	glutInitDisplayMode(GLUT_RGBA);	
 
