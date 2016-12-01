@@ -4,18 +4,28 @@
 #include "scene.h"
 
 
+#ifdef __APPLE__
+float charSpeed = 0.13f;
+float gameSpeed = 0.3f;
+#else
+float charSpeed = 0.008f;
+float gameSpeed = 0.06f;
+#endif
+
+
+//Game Speed
+float boxSpeed = gameSpeed;
+
+
 //Character Position
 float charPos[] = {0, 0, 10};
 
 
 //Character Movement
 float charAngle = 0.0f;
-float charSpeed = 0.13f; //@Ben: 0.008f
 float charLeftAcc = 0.0f;
 float charRightAcc = 0.0f;
 
-//Speed
-float boxSpeed = 0.3f;//0.2f; //@Ben: 0.06f
 
 //Clock for score
 float pauseClock = 0;
@@ -154,8 +164,7 @@ void specialUp(int key, int x, int y){
 
 
 void init(void){
-	glClearColor(0, 0.68, 0.146, 0);	
-	glColor3f(1, 1, 1);			
+	glClearColor(0, 0.68, 0.146, 0);			
 	glMatrixMode(GL_PROJECTION);	
 	glLoadIdentity();			
 	gluPerspective(45, 1, 1, 100);
@@ -163,35 +172,36 @@ void init(void){
 
 
 void display(void){
-    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);	
+	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 
-	if(gamePause==false) boxSpeed = 0.3f;
+	if(!gamePause) boxSpeed = gameSpeed;
 	else boxSpeed = 0.0f;
 
 	glTranslatef(0.0f, 0.0f, zLocation);
 	zLocation += boxSpeed;
 
-	if(zLocation >= 235.0f || setPowerups == false){
+	if(zLocation >= 235.0f || !setPowerups){
+		glClear(GL_DEPTH_BUFFER_BIT);
 		zLocation = -5.0f;
 
 		//Generate new locations for collect blocks
 		for(int i=0;i<totalCollectBoxes;i++){
-			collectX[i] = collect.genX(8);
+			collectX[i] = collect.genX(7);
 			collectZ[i] = collect.genZ(200);
 			actualCollectZ[i] = collectZ[i];
 		}
 
 		//Generate new locations for avoid blocks
 		for(int i=0;i<totalAvoidBoxes;i++){
-			avoidX[i] = avoid.genX(8);
+			avoidX[i] = avoid.genX(7);
 			avoidZ[i] = avoid.genZ(200);
 			actualAvoidZ[i] = avoidZ[i];
 		}
 
-		if(setPowerups == false){
+		if(!setPowerups){
 			setPowerups = true;
 			mainCharacter.drawCharacter(charPos, 240.0f);
 		}
@@ -206,10 +216,10 @@ void display(void){
         theWorld.drawRoad(zLocation);
     glPopMatrix();
 
-    // Score calculated by time
-    playerScore = (clock() - pauseClock)/100000;
+    //Score calculated by time
+    playerScore = (clock() - pauseClock) / 100000;
 
-    if(gamePause==true) pauseClock = clock() - currentClock;
+    if(gamePause) pauseClock = clock() - currentClock;
     else currentClock = clock() - pauseClock;
 
     //Parsing text
@@ -240,12 +250,12 @@ void display(void){
     if(!leftPressed) charLeftAcc = 0.0f;
     if(!rightPressed) charRightAcc = 0.0f;
 
-    if(leftPressed == true && charPos[0] > -4.4){
+    if(leftPressed && charPos[0] > -4.8){
     	charLeftAcc -= 0.015;
     	charPos[0] -= (charSpeed - charLeftAcc);
     }
     
-    if(rightPressed == true && charPos[0] < 4.8){
+    if(rightPressed && charPos[0] < 4.8){
     	charRightAcc += 0.015;
     	charPos[0] += (charSpeed + charRightAcc);
     }
@@ -269,23 +279,23 @@ void display(void){
     glPopMatrix();
     
     // Collision detection
-    if(gamePause == false){
-    for(int i=0;i<totalCollectBoxes;i++){
-    	actualCollectZ[i] += boxSpeed;
-    	if(hitTest(collectX[i], actualCollectZ[i])){
-    		collectZ[i] = 20;
-    		score = updateScore(score, true);
-    	}
-    }
+    if(!gamePause){
+	    for(int i=0;i<totalCollectBoxes;i++){
+	    	actualCollectZ[i] += boxSpeed;
+	    	if(hitTest(collectX[i], actualCollectZ[i])){
+	    		collectZ[i] = 20;
+	    		score = updateScore(score, true);
+	    	}
+	    }
 
-    for(int i=0;i<totalAvoidBoxes;i++){
-    	actualAvoidZ[i] += boxSpeed;
-    	if(hitTest(avoidX[i], actualAvoidZ[i])){
-    		avoidZ[i] = 20;
-    		score = updateScore(score, false);
-    	}
-    }
-}
+	    for(int i=0;i<totalAvoidBoxes;i++){
+	    	actualAvoidZ[i] += boxSpeed;
+	    	if(hitTest(avoidX[i], actualAvoidZ[i])){
+	    		avoidZ[i] = 20;
+	    		score = updateScore(score, false);
+	    	}
+	    }
+	}
     glutSwapBuffers();
 	glutPostRedisplay();
     glFlush();
