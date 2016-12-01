@@ -21,17 +21,17 @@ float pauseClock = 0;
 float currentClock = 0;
 
 //Boxes to collect
-int totalCollectBoxes = 20; //Total number of boxes per loop
-int collectX [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int collectZ [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualCollectZ [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+int totalCollectBoxes = 10; //Total number of boxes per loop
+int collectX [10]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int collectZ [10]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualCollectZ [10]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Boxes to avoid
-int totalAvoidBoxes = 70; //Total number of boxes per loop
-int avoidX [70]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int avoidZ [70]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualAvoidZ [70]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+int totalAvoidBoxes = 90; //Total number of boxes per loop
+int avoidX [90]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int avoidZ [90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualAvoidZ [90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Initial Powerup location
@@ -72,10 +72,10 @@ int collectX2 [10]; //X coordinate of the box (MUST be the same as the total num
 int collectZ2 [10]; //Z coordinate of the box (MUST be the same as the total number of boxes)
 float actualCollectZ2 [10]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
-int totalAvoidBoxes2 = 20; //Total number of boxes per loop
-int avoidX2 [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int avoidZ2 [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualAvoidZ2 [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+int totalAvoidBoxes2 = 90; //Total number of boxes per loop
+int avoidX2 [90]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int avoidZ2 [90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualAvoidZ2 [90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 // End of second wave boxes
 
