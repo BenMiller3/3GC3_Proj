@@ -204,14 +204,14 @@ void display(void){
 
 		//Generate new locations for collect blocks
 		for(int i=0;i<totalCollectBoxes;i++){
-			collectX[i] = collect.genX(8);
+			collectX[i] = collect.genX(9);
 			collectZ[i] = collect.genZ(200);
 			actualCollectZ[i] = collectZ[i];
 		}
 
 		//Generate new locations for avoid blocks
 		for(int i=0;i<totalAvoidBoxes;i++){
-			avoidX[i] = avoid.genX(8);
+			avoidX[i] = avoid.genX(9);
 			avoidZ[i] = avoid.genZ(200);
 			actualAvoidZ[i] = avoidZ[i];
 		}
