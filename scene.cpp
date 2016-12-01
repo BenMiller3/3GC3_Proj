@@ -5,80 +5,73 @@ Scene::Scene(){
 	
 }
 
-/*
-// BMP image loader
-GLuint LoadTexture( const char * filename )
-{
+unsigned int texture[1];
 
-  GLuint texture;
+// Structure for holding bitmap info
+struct Image{
+long SizeX;
+long SizeY;
+char *data;
+};
+typedef struct Image Image;
 
-  int width, height;
+void LoadBMP(char *filename, Image *image){
+FILE *file;
+short int bpp;
+short int planes;
+long i;
+long size;
+char temp;
 
-  unsigned char * data;
-
-  FILE * file;
-
-  file = fopen( filename, "rb" );
-
-  if ( file == NULL ) return 0;
-  width = 1024;
-  height = 512;
-  data = (unsigned char *)malloc( width * height * 3 );
-  //int size = fseek(file,);
-  fread( data, width * height * 3, 1, file );
-  fclose( file );
-
- for(int i = 0; i < width * height ; ++i)
-{
-   int index = i*3;
-   unsigned char B,R;
-   B = data[index];
-   R = data[index+2];
-
-   data[index] = R;
-   data[index+2] = B;
-
+file = fopen(filename, "rb");
+fseek(file, 18, SEEK_CUR);
+i = fread(&image->SizeX, 4, 1, file);
+i = fread(&image->SizeY, 4, 1, file);
+size = image->SizeX * image->SizeY * 3;
+i = fread(&bpp, 2, 1, file);
+i = fread(&planes, 2, 1, file);
+fseek(file, 24, SEEK_CUR);
+image->data = (char *)malloc(size);
+i = fread(image->data, size, 1, file);
+for(i = 0; i < size; i+=3){
+temp = image->data[i];
+image->data[i] = image->data[i+2];
+image->data[i+2] = temp;
+}
+fclose(file);
+free(image);
 }
 
+void LoadTextures(void){
+Image *image1;
 
-glGenTextures( 1, &texture );
-glBindTexture( GL_TEXTURE_2D, texture );
-glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE );
-glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST );
-
-
-glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR );
-glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT );
-glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT );
-gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,GL_RGB, GL_UNSIGNED_BYTE, data );
-free( data );
-
-return texture;
+image1 = (Image *)malloc(sizeof(Image));
+LoadBMP("Textures/path.bmp", image1);
+glGenTextures(1, &texture[0]);
+glBindTexture(GL_TEXTURE_2D, texture[0]);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+gluBuild2DMipmaps(GL_TEXTURE_2D, 3, image1->SizeX, image1->SizeY, GL_RGB, GL_UNSIGNED_BYTE, image1->data);
 }
-*/
 
 void Scene::drawRoad(float zPosition){
 	
-	/*
-	// texture enabled here
-	GLuint texture;
-	texture = LoadTexture("Textures/path.bmp");
-
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glEnable(GL_TEXTURE_2D);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 9, 9, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
-	*/
 
 	float size = 9.6f;
 
 	glColor3f(0.87f, 0.59f, 0.12f);
 
+	glEnable(GL_TEXTURE_2D);
+	//LoadTextures();
+
 	glBegin(GL_QUADS);
-		glTexCoord2f(0,0);
+		glTexCoord2f(0.0,0.0);
 		glVertex3f(-size, -size, (10.0f - zPosition));	// Bottom left corner
+		glTexCoord2f(0.0, 1.0);
 		glVertex3f(-size, size, (-50.0f - zPosition));	// Top left corner
+		glTexCoord2f(1.0, 1.0);
 		glVertex3f(size, size, (-50.0f - zPosition));	// Top right corner
+		glTexCoord2f(1.0, 0.0);
 		glVertex3f(size, -size, (10.0f - zPosition));	// Bottom right corner
 	glEnd();
 }
