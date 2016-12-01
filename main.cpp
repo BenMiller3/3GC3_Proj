@@ -9,7 +9,9 @@ float charPos[] = {0, 0, 10};
 
 //Character Movement
 float charAngle = 0.0f;
-float charSpeed = 0.15f; //@Ben: 0.008f
+float charSpeed = 0.1f; //@Ben: 0.008f
+float charLeftAcc = 0.0f;
+float charRightAcc = 0.0f;
 
 //Speed
 float boxSpeed = 0.06f;//0.2f; //@Ben: 0.06f
@@ -289,12 +291,17 @@ void display(void){
     glPopMatrix();
 
     //Move the character
+    if(!leftPressed) charLeftAcc = 0.0f;
+    if(!rightPressed) charRightAcc = 0.0f;
+
     if(leftPressed == true && charPos[0] > -4.4){
-    	charPos[0] -= charSpeed;
+    	charLeftAcc -= 0.01;
+    	charPos[0] -= (charSpeed - charLeftAcc);
     }
     
     if(rightPressed == true && charPos[0] < 4.4){
-    	charPos[0] += charSpeed;
+    	charRightAcc += 0.01;
+    	charPos[0] += (charSpeed + charRightAcc);
     }
     
     //lighting
