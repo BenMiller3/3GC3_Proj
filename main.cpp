@@ -3,21 +3,6 @@
 #include "box.h"
 #include "scene.h"
 
-void introduction(){
-    printf("\n\n\n          BLOCK BOARDING \n");
-    printf("by Victoria Graff, 001401451, graffve\n");
-    printf("and Emily Ashworth, 001402976, ashworel \n");
-    printf("and Kareem... \n");
-    printf("and Ben ....  \n\n");
-    printf("INSTRUCTIONS:\n\n");
-    //feel free to update this as you update the game
-    printf("Use left and right arrow keys to move character left and right\n");
-    printf("Avoid black boxes and collect green boxes\n");
-    printf("Your score is based on the distance you are able to go\n");
-    printf("The green boxes give you health while the black ones take away health\n");
-    printf("Press spacebar to pause\n\n");
-    }
-
 //Character Position
 float charPos[] = {0, 0, 10};
 
@@ -31,22 +16,9 @@ float charRightAcc = 0.0f;
 //Speed
 float boxSpeed = 0.3f;//0.2f; //@Ben: 0.06f
 
-// CLOCK -- for scoring
+//Clock for score
 float pauseClock = 0;
 float currentClock = 0;
-
-//Boxes to collect
-int totalCollectBoxes = 10; //Total number of boxes per loop
-int collectX [10]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int collectZ [10]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualCollectZ [10]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
-
-
-//Boxes to avoid
-int totalAvoidBoxes = 90; //Total number of boxes per loop
-int avoidX [90]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int avoidZ [90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualAvoidZ [90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 //Initial Powerup location
@@ -75,54 +47,64 @@ bool resetGame = false;
 
 Scene theWorld = Scene();
 Character mainCharacter = Character();
+
+//First wave of boxes
 Box collect = Box();
 Box avoid = Box();
 
-// 2nd wave of boxes
+//Alternative wave of boxes
 Box collect2 = Box();
 Box avoid2 = Box();
+
+
+//Boxes to collect
+int totalCollectBoxes = 10; //Total number of boxes per loop
+int collectX[10]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int collectZ[10]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualCollectZ[10]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+
+
+//Boxes to avoid
+int totalAvoidBoxes = 90; //Total number of boxes per loop
+int avoidX[90]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int avoidZ[90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualAvoidZ[90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+
 
 int totalCollectBoxes2 = 10; //Total number of boxes per loop
 int collectX2 [10]; //X coordinate of the box (MUST be the same as the total number of boxes)
 int collectZ2 [10]; //Z coordinate of the box (MUST be the same as the total number of boxes)
 float actualCollectZ2 [10]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
+
 int totalAvoidBoxes2 = 90; //Total number of boxes per loop
 int avoidX2 [90]; //X coordinate of the box (MUST be the same as the total number of boxes)
 int avoidZ2 [90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
 float actualAvoidZ2 [90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
-// End of second wave boxes
-
 
 void displayText(float x, float y, float z, const char *string){
 	int j = strlen(string);
- 
 	glColor3f(0, 0, 0);
 	glRasterPos3f(x, y, z);
-	for(int i=0;i<j;i++){
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
-	}
+	for(int i=0;i<j;i++) glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 }
 
+
 void gameOver(){
-    printf("GAME OVER\n\n");
 	exit(0);
 }
 
+
 void pauseGame(){
-	if(gamePause==true){
-		gamePause = false;
-	}
-	else{
-		gamePause = true;	
-	}
+	if(gamePause==true) gamePause = false;
+	else gamePause = true;
 }
 
 
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
-	if(abs(dx) <= 0.7 && (z > 9 && z < 13)) return true;
+	if(abs(dx) <= 0.7 && (z > 9 && z < 12.5)) return true;
 	else return false;
 }
 
@@ -141,10 +123,8 @@ int updateScore(int score, bool effect){
 
 void keyboard(unsigned char key, int xIn, int yIn){
 	switch(key){
-		case 'q':
-			exit(0);
-		case 27:
-			exit(0);
+		case 'q': exit(0);
+		case 27: exit(0);
 		case 'a':
 			if(gamePause == false) leftPressed = true;
 			break;
@@ -167,18 +147,16 @@ void keyUp(unsigned char key, int x, int y){
 
 
 void special(int key, int x, int y){
-	
 	if(gamePause == false){
-	switch(key){
-		case GLUT_KEY_LEFT:
-			leftPressed = true;
-			break;
-
-		case GLUT_KEY_RIGHT:
-			rightPressed = true;
-			break;
+		switch(key){
+			case GLUT_KEY_LEFT:
+				leftPressed = true;
+				break;
+			case GLUT_KEY_RIGHT:
+				rightPressed = true;
+				break;
+		}
 	}
-}
 	glutPostRedisplay();
 }
 
@@ -205,16 +183,11 @@ void display(void){
 	glLoadIdentity();
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);	
 
-	if(gamePause==false){
-		boxSpeed = 0.3f;
-	}
-	else{
-		boxSpeed = 0.0f;
-	}
+	if(gamePause==false) boxSpeed = 0.3f;
+	else boxSpeed = 0.0f;
 
 	glTranslatef(0.0f, 0.0f, zLocation);
 	zLocation += boxSpeed;
-	
 
 	if(zLocation >= 205.0f || setPowerups == false){
 		zLocation = -5.0f;
@@ -243,7 +216,6 @@ void display(void){
         glPopMatrix();
 	}
 
-
 	// Smooth the transition between the two waves
 	if(zLocation >= 500.0f){
 
@@ -263,7 +235,6 @@ void display(void){
 
 	}
 
-
 	//Draw road
     glPushMatrix();
         theWorld.drawRoad(zLocation);
@@ -272,26 +243,19 @@ void display(void){
     // Score calculated by time
     playerScore = (clock() - pauseClock)/100000;
 
-    
-    if(gamePause==true){
-
-    	pauseClock = clock() - currentClock;
-    }
-    else{
-    	currentClock = clock() - pauseClock;
-    }
-
+    if(gamePause==true) pauseClock = clock() - currentClock;
+    else currentClock = clock() - pauseClock;
 
     //Parsing text
-    char buffer [100];
-	snprintf(buffer,100,"Score: %d",playerScore);  
+    char buffer[100];
+	snprintf(buffer, 100, "Score: %d", playerScore);  
 
-	char healthBuffer [100];
-	snprintf(healthBuffer,100,"Health: %d %%",score/3);
+	char healthBuffer[100];
+	snprintf(healthBuffer, 100, "Health: %d %%", score / 3);
 
 	// Draw text
 	glPushMatrix();
-    	displayText(-6,6,-zLocation, healthBuffer);
+    	displayText(-6, 6, -zLocation, healthBuffer);
     	displayText(2.8, 6.0, -zLocation, buffer);
     glPopMatrix();
 
@@ -356,7 +320,6 @@ void display(void){
     	}
     }
 }
-
     glutSwapBuffers();
 	glutPostRedisplay();
     glFlush();
@@ -364,7 +327,6 @@ void display(void){
 
 
 int main(int argc, char** argv){
-    introduction();
 	glutInit(&argc, argv); 	
 	glutInitDisplayMode(GLUT_RGBA);	
 
