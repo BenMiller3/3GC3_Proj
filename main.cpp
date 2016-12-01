@@ -56,6 +56,7 @@ bool rightPressed = false;
 
 //Score Variable
 int score = 300;
+int playerScore = 0;
 
 
 Scene theWorld = Scene();
@@ -189,15 +190,20 @@ void display(void){
         theWorld.drawRoad(zLocation);
     glPopMatrix();
 
-    std::ostringstream oss;
-    oss << "Health: " << round(score/3) << " pts" << "	Score: " << clock()/1000000 << endl;
+    // Score calculated by time
+    playerScore = clock()/1000000;
 
-    std::cout << oss.str();
+    //Parsing text
+    char buffer [100];
+	snprintf(buffer,100,"Score: %d",playerScore);  
+
+	char healthBuffer [100];
+	snprintf(healthBuffer,100,"Health: %d %%",score/3);
 
 	// Draw text
 	glPushMatrix();
-    	displayText(-6,6,-zLocation, "Health: 100 pts");
-    	displayText(2.8, 6.0, -zLocation, "Score: 0");
+    	displayText(-6,6,-zLocation, healthBuffer);
+    	displayText(2.8, 6.0, -zLocation, buffer);
     glPopMatrix();
 
     //Draw collect and avoid boxes at random locations
