@@ -5,7 +5,6 @@
 
 //Character Position
 float charPos[] = {0, 0, 10};
-float charRot[] = {0, 0, 0};
 
 
 //Character Movement
@@ -218,11 +217,11 @@ void display(void){
 
 		if(setPowerups == false){
 			setPowerups = true;
-			mainCharacter.drawCharacter(charPos, charRot, 210.0f);
+			mainCharacter.drawCharacter(charPos, 210.0f);
 		}
 
         glPushMatrix();
-            mainCharacter.drawCharacter(charPos, charRot, -210.2f);
+            mainCharacter.drawCharacter(charPos, -210.2f);
         glPopMatrix();
 	}
 
@@ -286,18 +285,16 @@ void display(void){
 
 	//Draw Assets
     glPushMatrix();
-        mainCharacter.drawCharacter(charPos, charRot, boxSpeed);
+        mainCharacter.drawCharacter(charPos, boxSpeed);
     glPopMatrix();
 
     //Move the character
     if(leftPressed == true && charPos[0] > -4.4){
     	charPos[0] -= charSpeed;
-		charRot[1] = -90;
     }
     
     if(rightPressed == true && charPos[0] < 4.4){
     	charPos[0] += charSpeed;
-    	charRot[1] = 90;
     }
     
     //lighting

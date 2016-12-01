@@ -28,7 +28,7 @@ float wood[] = {0.52, 0.37, 0.26};
 Character::Character(){ }
 
 
-void Character::drawCharacter(float* pos, float* rot, float gameSpeed){
+void Character::drawCharacter(float* pos, float gameSpeed){
     glPushMatrix();
     pos[2] = pos[2] - gameSpeed;
     
