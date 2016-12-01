@@ -123,10 +123,10 @@ void keyboard(unsigned char key, int xIn, int yIn){
 		case 'q': exit(0);
 		case 27: exit(0);
 		case 'a':
-			if(gamePause == false) leftPressed = true;
+			if(!gamePause) leftPressed = true;
 			break;
 		case 'd':
-			if(gamePause == false) rightPressed = true;
+			if(!gamePause) rightPressed = true;
 			break;
 		case ' ':
 			pauseGame();
@@ -144,7 +144,7 @@ void keyUp(unsigned char key, int x, int y){
 
 
 void special(int key, int x, int y){
-	if(gamePause == false){
+	if(!gamePause){
 		switch(key){
 			case GLUT_KEY_LEFT:
 				leftPressed = true;
