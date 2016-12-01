@@ -57,6 +57,22 @@ Character mainCharacter = Character();
 Box collect = Box();
 Box avoid = Box();
 
+// 2nd wave of boxes
+Box collect2 = Box();
+Box avoid2 = Box();
+
+int totalCollectBoxes2 = 10; //Total number of boxes per loop
+int collectX2 [10]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int collectZ2 [10]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualCollectZ2 [10]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+
+int totalAvoidBoxes2 = 20; //Total number of boxes per loop
+int avoidX2 [20]; //X coordinate of the box (MUST be the same as the total number of boxes)
+int avoidZ2 [20]; //Z coordinate of the box (MUST be the same as the total number of boxes)
+float actualAvoidZ2 [20]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
+
+// End of second wave boxes
+
 
 void displayText(float x, float y, float z, const char *string){
 	int j = strlen(string);
@@ -177,6 +193,27 @@ void display(void){
             mainCharacter.drawCharacter(charPos, charRot, -210.2f);
         glPopMatrix();
 	}
+
+
+	// Smooth the transition between the two waves
+	if(zLocation >= 150.0f){
+
+		//Generate new locations for collect blocks
+		for(int i=0;i<totalCollectBoxes2;i++){
+			collectX2[i] = collect2.genX(8);
+			collectZ2[i] = collect2.genZ(75);
+			actualCollectZ2[i] = collectZ2[i];
+		}
+
+		//Generate new locations for avoid blocks
+		for(int i=0;i<totalAvoidBoxes2;i++){
+			avoidX2[i] = avoid2.genX(8);
+			avoidZ2[i] = avoid2.genZ(75);
+			actualAvoidZ2[i] = avoidZ2[i];
+		}
+
+	}
+
 
 	//Draw road
     glPushMatrix();
