@@ -3,6 +3,7 @@
 #include "box.h"
 #include "scene.h"
 
+
 //Character Position
 float charPos[] = {0, 0, 10};
 
@@ -37,7 +38,7 @@ bool leftPressed = false;
 bool rightPressed = false;
 
 //Score Variable
-int score = 300;
+int score = 150;
 int playerScore = 0;
 
 //Game variables
@@ -48,13 +49,9 @@ bool resetGame = false;
 Scene theWorld = Scene();
 Character mainCharacter = Character();
 
-//First wave of boxes
+//Boxes
 Box collect = Box();
 Box avoid = Box();
-
-//Alternative wave of boxes
-Box collect2 = Box();
-Box avoid2 = Box();
 
 
 //Boxes to collect
@@ -69,18 +66,6 @@ int totalAvoidBoxes = 90; //Total number of boxes per loop
 int avoidX[90]; //X coordinate of the box (MUST be the same as the total number of boxes)
 int avoidZ[90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
 float actualAvoidZ[90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
-
-
-int totalCollectBoxes2 = 10; //Total number of boxes per loop
-int collectX2 [10]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int collectZ2 [10]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualCollectZ2 [10]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
-
-
-int totalAvoidBoxes2 = 90; //Total number of boxes per loop
-int avoidX2 [90]; //X coordinate of the box (MUST be the same as the total number of boxes)
-int avoidZ2 [90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
-float actualAvoidZ2 [90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
 
 void displayText(float x, float y, float z, const char *string){
@@ -189,7 +174,7 @@ void display(void){
 	glTranslatef(0.0f, 0.0f, zLocation);
 	zLocation += boxSpeed;
 
-	if(zLocation >= 205.0f || setPowerups == false){
+	if(zLocation >= 235.0f || setPowerups == false){
 		zLocation = -5.0f;
 
 		//Generate new locations for collect blocks
@@ -208,31 +193,12 @@ void display(void){
 
 		if(setPowerups == false){
 			setPowerups = true;
-			mainCharacter.drawCharacter(charPos, 210.0f);
+			mainCharacter.drawCharacter(charPos, 240.0f);
 		}
 
         glPushMatrix();
-            mainCharacter.drawCharacter(charPos, -210.2f);
+            mainCharacter.drawCharacter(charPos, -240.0f);
         glPopMatrix();
-	}
-
-	// Smooth the transition between the two waves
-	if(zLocation >= 500.0f){
-
-		//Generate new locations for collect blocks
-		for(int i=0;i<totalCollectBoxes2;i++){
-			collectX2[i] = collect2.genX(8);
-			collectZ2[i] = collect2.genZ(200);
-			actualCollectZ2[i] = collectZ2[i];
-		}
-
-		//Generate new locations for avoid blocks
-		for(int i=0;i<totalAvoidBoxes2;i++){
-			avoidX2[i] = avoid2.genX(8);
-			avoidZ2[i] = avoid2.genZ(200);
-			actualAvoidZ2[i] = avoidZ2[i];
-		}
-
 	}
 
 	//Draw road

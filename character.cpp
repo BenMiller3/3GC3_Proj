@@ -1,22 +1,11 @@
 #include "header.h"
 #include "character.h"
 
-#include <iostream>
 #include <stdlib.h>
-#include <math.h>
 #include <time.h>
 #include <list>
 #include <vector>
 
-#ifdef __APPLE__
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
-#  include <GLUT/glut.h>
-#else
-#  include <GL/gl.h>
-#  include <GL/glu.h>
-#  include <GL/freeglut.h>
-#endif
 
 /* Colours */
 float blue[] = {0.132, 0.112, 0.255};
