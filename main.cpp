@@ -185,7 +185,7 @@ void display(void){
 	glTranslatef(0.0f, 0.0f, zLocation);
 	zLocation += boxSpeed;
 
-	if(zLocation >= 235.0f || !setPowerups){
+	if(zLocation >= 240.0f || !setPowerups){
 		zLocation = -5.0f;
 
 		//Generate new locations for collect blocks
@@ -204,11 +204,11 @@ void display(void){
 
 		if(!setPowerups){
 			setPowerups = true;
-			mainCharacter.drawCharacter(charPos, 240.0f);
+			mainCharacter.drawCharacter(charPos, 245.0f);
 		}
 
         glPushMatrix();
-            mainCharacter.drawCharacter(charPos, -240.0f);
+            mainCharacter.drawCharacter(charPos, -245.0f);
         glPopMatrix();
 	}
 
@@ -279,12 +279,12 @@ void display(void){
         glLightfv(GL_LIGHT0, GL_AMBIENT, amb1);
     glPopMatrix();
     
-    // Collision detection
+    //Collision detection
     if(!gamePause){
 	    for(int i=0;i<totalCollectBoxes;i++){
 	    	actualCollectZ[i] += boxSpeed;
 	    	if(hitTest(collectX[i], actualCollectZ[i])){
-	    		collectZ[i] = 20;
+	    		collectZ[i] = 100;
 	    		score = updateScore(score, true);
 	    	}
 	    }
@@ -292,7 +292,7 @@ void display(void){
 	    for(int i=0;i<totalAvoidBoxes;i++){
 	    	actualAvoidZ[i] += boxSpeed;
 	    	if(hitTest(avoidX[i], actualAvoidZ[i])){
-	    		avoidZ[i] = 20;
+	    		avoidZ[i] = 100;
 	    		score = updateScore(score, false);
 	    	}
 	    }
