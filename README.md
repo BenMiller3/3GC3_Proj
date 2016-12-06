@@ -1,22 +1,20 @@
-# McMaster 3D Endless Runner
-========================
-Please help me come up with a better title.
 
-A 3D runner game made with OpenGL and GLUT. The basis of this game is a runner attempting to escape a world. This game will allow the player to control an average McMaster Software Engineering student who has to escape the McMaster campus while collecting bonus marks and grace periods to save their GPA, along with other additional power ups. They also have to avoid instructors, teaching assistants, assignments, tests, and much more throughout their journey. Building this game and the world in which it takes place will be a challenging yet fruitful experience. The project will allow this team to experiment with building a 3D environment, wireframing for character development, and the ability to manipulate and recreate realistic physics.
+Block Boarding
 
-## Features
-=============
-* Feature 1
-* Feature 2
-* Feature etc.
+Kareem Abdel Mesih - 001407633 - abdelk2
+Ben Miller - 001416516 - millebd
+Victoria Graff - 001401451 - graffve
+Emily Ashworth - 001402976 - ashworel
 
-## Usage
-===========
-Clone or download the code repository. 
-Enter in the commandline:
-```bash
-make 
-```
-This will create the scene.
-Use the aswd keys to control the character through the world.
+Compilation Instructions:
 
+Clone or download the code repository. Enter in the command line: make
+Or simply click the precompiled executable block_boarding.exe.
+This will create the scene. Follow the game instructions below.
+
+Game Instructions:
+
+-Use the arrow keys or A and D to move the character left and right. Avoid black boxes and collect green boxes. 
+-Your score is based on the distance you are able to go.
+-The green boxes give you health while the black ones take away health.
+-Press the space to pause and unpause the game.
