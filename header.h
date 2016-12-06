@@ -13,4 +13,5 @@
 #include <stdio.h>
 #include <ctime>
 #include <iostream>
+#include <cstring>
 using namespace std;
