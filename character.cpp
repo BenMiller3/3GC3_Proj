@@ -2,7 +2,7 @@
 #include "character.h"
 
 
-/* Colours */
+//Colours
 float blue[] = {0.132, 0.112, 0.255};
 float red[] = {0.205, 0.091, 0.069};
 float black[] = {0, 0, 0};
@@ -10,6 +10,7 @@ float skin[] = {0.96, 0.80, 0.69};
 float wood[] = {0.52, 0.37, 0.26};
 
 
+//Empty constructor
 Character::Character(){ }
 
 
