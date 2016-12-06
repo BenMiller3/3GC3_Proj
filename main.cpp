@@ -50,7 +50,7 @@ bool leftPressed = false;
 bool rightPressed = false;
 
 //Score Variable
-int score = 100;
+int score = 50;
 int playerScore = 0;
 
 //Game variables
