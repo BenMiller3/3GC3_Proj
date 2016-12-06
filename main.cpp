@@ -79,7 +79,7 @@ int avoidX[90]; //X coordinate of the box (MUST be the same as the total number 
 int avoidZ[90]; //Z coordinate of the box (MUST be the same as the total number of boxes)
 float actualAvoidZ[90]; //Updated Z coordinate of the box (MUST be the same as the total number of boxes)
 
-
+// Output the game instructions to the commandline
 void introduction(){
     cout << "\n\n\nBlock Boarding\n" << endl;
     cout << "by Victoria Graff, 001401451, graffve\n" << endl;
@@ -94,7 +94,7 @@ void introduction(){
     cout << "Press the spacebar to pause and unpause the game\n\n" << endl;
  }
 
-
+// Function to display text on screen
 void displayText(float x, float y, float z, const char *string){
 	int j = strlen(string);
 	glColor3f(0, 0, 0);
@@ -102,26 +102,26 @@ void displayText(float x, float y, float z, const char *string){
 	for(int i=0;i<j;i++) glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 }
 
-
+// Function to end the game when the player runs out of health
 void gameOver(){
     cout << "GAME OVER\n\n" << endl;
 	exit(0);
 }
 
-
+// Pauses the game when the SPACE BAR key is hit
 void pauseGame(){
 	if(gamePause==true) gamePause = false;
 	else gamePause = true;
 }
 
-
+// Collision detection
 bool hitTest(int x, int z){
 	int dx = charPos[0] - x;
 	if(abs(dx) <= 0.7 && (z > 9 && z < 12.5)) return true;
 	else return false;
 }
 
-
+// Updates the score based on the player's current time spent in the game
 int updateScore(int score, bool effect){
 	if(effect){
 		if(score >= 300) return score;
@@ -133,7 +133,7 @@ int updateScore(int score, bool effect){
 	}
 }
 
-
+// Keyboard function
 void keyboard(unsigned char key, int xIn, int yIn){
 	switch(key){
 		case 'q': exit(0);
@@ -158,7 +158,7 @@ void keyUp(unsigned char key, int x, int y){
 	else if(key == 'd') rightPressed = false;
 }
 
-
+// Special keys -- The arrow keys
 void special(int key, int x, int y){
 	if(!gamePause){
 		switch(key){
@@ -180,7 +180,7 @@ void specialUp(int key, int x, int y){
 	else if(key == GLUT_KEY_LEFT) leftPressed = false;
 }
 
-
+// Game initialization
 void init(void){
 	glClearColor(0, 0.68, 0.146, 0);			
 	glMatrixMode(GL_PROJECTION);	
@@ -188,7 +188,7 @@ void init(void){
 	gluPerspective(45, 1, 1, 100);
 }
 
-
+// Main display function
 void display(void){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
@@ -318,7 +318,7 @@ void display(void){
     glFlush();
 }
 
-
+// Main game loop
 int main(int argc, char** argv){
 	srand(time(NULL));
 	glutInit(&argc, argv); 	
