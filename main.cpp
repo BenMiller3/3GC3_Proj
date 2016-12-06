@@ -50,7 +50,7 @@ bool leftPressed = false;
 bool rightPressed = false;
 
 //Score Variable
-int score = 150;
+int score = 100;
 int playerScore = 0;
 
 //Game variables
@@ -220,11 +220,11 @@ void display(void){
 
 		if(!setPowerups){
 			setPowerups = true;
-			mainCharacter.drawCharacter(charPos, 245.0f);
+			mainCharacter.drawCharacter(charPos, 245.0f, false);
 		}
 
         glPushMatrix();
-            mainCharacter.drawCharacter(charPos, -245.0f);
+            mainCharacter.drawCharacter(charPos, -245.0f, false);
         glPopMatrix();
 	}
 
@@ -244,7 +244,7 @@ void display(void){
 	snprintf(buffer, 100, "Score: %d", playerScore);  
 
 	char healthBuffer[100];
-	snprintf(healthBuffer, 100, "Health: %d %%", score / 3);
+	snprintf(healthBuffer, 100, "Health: %d ", score);
 
 	// Draw text
 	glPushMatrix();
@@ -260,7 +260,13 @@ void display(void){
 
 	//Draw Assets
     glPushMatrix();
-        mainCharacter.drawCharacter(charPos, boxSpeed);
+        if(score < 20){
+            //alpha blend
+            mainCharacter.drawCharacter(charPos, boxSpeed, true);
+        }
+        else{
+            mainCharacter.drawCharacter(charPos, boxSpeed, false);
+        }
     glPopMatrix();
 
     //Move the character

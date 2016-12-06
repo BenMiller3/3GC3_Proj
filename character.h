@@ -7,7 +7,7 @@ class Character{
 
 public:
 	Character();
-	void drawCharacter(float* pos, float gameSpeed);
+	void drawCharacter(float* pos, float gameSpeed, bool blend);
 };
 
 #endif
