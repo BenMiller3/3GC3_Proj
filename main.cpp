@@ -90,7 +90,8 @@ void introduction(){
     cout << "Use the arrow keys or A and D to move the character left and right\n" << endl;
     cout << "Avoid black boxes and collect green boxes\n" << endl;
     cout << "Your score is based on the distance you are able to go\n" << endl;
-    cout << "The green boxes give you health while the black ones take away health\n\n" << endl;
+    cout << "The green boxes give you health while the black ones take away health\n" << endl;
+    cout << "Press the spacebar to pause and unpause the game\n\n" << endl;
  }
 
 
@@ -103,6 +104,7 @@ void displayText(float x, float y, float z, const char *string){
 
 
 void gameOver(){
+    cout << "GAME OVER\n\n" << endl;
 	exit(0);
 }
 
