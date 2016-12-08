@@ -3,7 +3,7 @@
 #include "box.h"
 #include "scene.h"
 
-
+// Different compile issue fix
 #ifdef __APPLE__
 float charSpeed = 0.13f;
 float gameSpeed = 0.3f;
@@ -32,6 +32,7 @@ float charRightAcc = 0.0f;
 //Clock for score
 float pauseClock = 0;
 float currentClock = 0;
+float gameOverClock = 0;
 
 
 //Initial Powerup location
@@ -50,13 +51,13 @@ bool leftPressed = false;
 bool rightPressed = false;
 
 //Score Variable
-int score = 50;
+int playerHealth = 1000;
 int playerScore = 0;
 
 //Game variables
 bool gamePause = false;
 bool resetGame = false;
-
+bool gameEnded = false;
 
 Scene theWorld = Scene();
 Character mainCharacter = Character();
@@ -102,12 +103,6 @@ void displayText(float x, float y, float z, const char *string){
 	for(int i=0;i<j;i++) glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 }
 
-// Function to end the game when the player runs out of health
-void gameOver(){
-    cout << "GAME OVER\n\n" << endl;
-	exit(0);
-}
-
 // Pauses the game when the SPACE BAR key is hit
 void pauseGame(){
 	if(gamePause==true) gamePause = false;
@@ -121,14 +116,25 @@ bool hitTest(int x, int z){
 	else return false;
 }
 
+void gameOver(){
+	gamePause = true;
+	printf("You scored: %d \n",playerScore);
+	playerHealth = 1000;
+	gameOverClock = clock() - pauseClock;
+}
+
+
 // Updates the score based on the player's current time spent in the game
 int updateScore(int score, bool effect){
-	if(effect){
-		if(score >= 300) return score;
+	if(effect and score > 0){
+		if(score >= 1000) return score;
 		else return score += 1;
 	}
 	else{
-		if(score <= 0) gameOver();
+		if(score <= 0){
+			gamePause = true;
+			gameEnded = true;
+		} 
 		else return score -= 1;
 	}
 }
@@ -195,6 +201,11 @@ void display(void){
 	glLoadIdentity();
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 
+	if(gameEnded == true){
+		gameOver();
+		gameEnded = false;
+	}
+
 	if(!gamePause) boxSpeed = gameSpeed;
 	else boxSpeed = 0.0f;
 
@@ -234,7 +245,7 @@ void display(void){
     glPopMatrix();
 
     //Score calculated by time
-    playerScore = (clock() - pauseClock) / 100000;
+    playerScore = (clock() - pauseClock - gameOverClock) / 100000;
 
     if(gamePause) pauseClock = clock() - currentClock;
     else currentClock = clock() - pauseClock;
@@ -244,7 +255,7 @@ void display(void){
 	snprintf(buffer, 100, "Score: %d", playerScore);  
 
 	char healthBuffer[100];
-	snprintf(healthBuffer, 100, "Health: %d ", score);
+	snprintf(healthBuffer, 100, "Health: %d %%", playerHealth/10);
 
 	// Draw text
 	glPushMatrix();
@@ -260,7 +271,7 @@ void display(void){
 
 	//Draw Assets
     glPushMatrix();
-        if(score < 20){
+        if(playerHealth < 200){
             //alpha blend
             mainCharacter.drawCharacter(charPos, boxSpeed, true);
         }
@@ -307,7 +318,7 @@ void display(void){
 	    	actualCollectZ[i] += boxSpeed;
 	    	if(hitTest(collectX[i], actualCollectZ[i])){
 	    		collectZ[i] = 100;
-	    		score = updateScore(score, true);
+	    		playerHealth = updateScore(playerHealth, true);
 	    	}
 	    }
 
@@ -315,7 +326,7 @@ void display(void){
 	    	actualAvoidZ[i] += boxSpeed;
 	    	if(hitTest(avoidX[i], actualAvoidZ[i])){
 	    		avoidZ[i] = 100;
-	    		score = updateScore(score, false);
+	    		playerHealth = updateScore(playerHealth, false);
 	    	}
 	    }
 	}
