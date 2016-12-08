@@ -121,6 +121,10 @@ void gameOver(){
 	printf("You scored: %d \n",playerScore);
 	playerHealth = 1000;
 	gameOverClock = clock() - pauseClock;
+	setPowerups = false;
+	charPos[0] = 0;
+	charPos[1] = 0;
+	charPos[2] = 10;
 }
 
 
