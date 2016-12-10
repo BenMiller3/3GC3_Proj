@@ -99,7 +99,9 @@ void introduction(){
     cout << "Avoid black boxes and collect green boxes\n" << endl;
     cout << "Your score is based on the distance you are able to go\n" << endl;
     cout << "The green boxes give you health while the black ones take away health\n" << endl;
-    cout << "Press the spacebar to pause and unpause the game\n\n" << endl;
+    cout << "Press the spacebar to pause and unpause the game\n" << endl;
+    cout << "Keys 1,2, and 3 can be used to try different camera angles: " << endl;
+    cout << "1 = Normal view, 2 = First Person View, 3 = Bird's eye view\n\n" << endl;
  }
 
 // Function to display text on screen
@@ -124,7 +126,6 @@ bool hitTest(int x, int z){
 
 void gameOver(){
 	gamePause = true;
-	printf("You scored: %d \n",playerScore);
 
 	// Resetting Values
 	playerHealth = 1000;
@@ -184,6 +185,7 @@ void keyboard(unsigned char key, int xIn, int yIn){
 			break;
 		case 'r':
 			gameOver();
+			gamePause = false;
 			break;
 		case ' ':
 			pauseGame();
@@ -258,9 +260,8 @@ void display(void){
 		gameOver();
 		gameEnded = false;
 	}
-	else{
-		gameOverScore = playerScore;
-	}
+
+	if(!gamePause) gameOverScore = playerScore;
 
 	if(!gamePause) boxSpeed = gameSpeed;
 	else boxSpeed = 0.0f;
@@ -321,8 +322,15 @@ void display(void){
 
 	// Draw text
 	glPushMatrix();
-    	displayText(-6, 6, -zLocation, healthBuffer);
+	if(camera != 2){
+		displayText(-6, 6, -zLocation, healthBuffer);
     	displayText(2.8, 6.0, -zLocation, buffer);
+	}
+	else{
+		displayText(-1 + charPos[0], 3, -zLocation+5, healthBuffer);
+		displayText(1 + charPos[0], 3, -zLocation+5, buffer);
+	}
+    	
     	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10) displayText(-2, 3, -zLocation, finalScoreBuffer);
     	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
     glPopMatrix();
