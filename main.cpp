@@ -47,6 +47,7 @@ float zLocation = -5.0f;
 
 //Camera Position
 float camPos[] = {0, 10, 15};
+int camera = 1;
 
 //Smooth Character Movement Animation
 bool leftPressed = false;
@@ -141,6 +142,8 @@ void gameOver(){
 	gameSpeed = 0.01f;
 	speedIncrease = 0.005f;
 	#endif
+
+	camera = 1;
 }
 
 
@@ -164,6 +167,12 @@ void keyboard(unsigned char key, int xIn, int yIn){
 	switch(key){
 		case 'q': exit(0);
 		case 27: exit(0);
+		case '1':
+			camera = 1;
+			break;
+		case '2':
+			camera = 2;
+			break;
 		case 'a':
 			if(!gamePause) leftPressed = true;
 			break;
@@ -216,6 +225,19 @@ void init(void){
 
 // Main display function
 void display(void){
+
+	if(camera == 1){
+	
+	camPos[0] = 0;
+	camPos[1] =  10;
+	camPos[2] = 15;
+	}
+	else if (camera == 2){
+		camPos[0] = charPos[0];
+		camPos[1] = 3;
+		camPos[2] = 9;
+	}
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
