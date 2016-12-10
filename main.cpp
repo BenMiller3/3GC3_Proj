@@ -323,8 +323,8 @@ void display(void){
 	glPushMatrix();
     	displayText(-6, 6, -zLocation, healthBuffer);
     	displayText(2.8, 6.0, -zLocation, buffer);
-    	if(gamePause) displayText(-2, 3, -zLocation, finalScoreBuffer);
-    	if(gamePause) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
+    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10) displayText(-2, 3, -zLocation, finalScoreBuffer);
+    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
     glPopMatrix();
 
     //Draw collect and avoid boxes at random locations
