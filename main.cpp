@@ -173,11 +173,17 @@ void keyboard(unsigned char key, int xIn, int yIn){
 		case '2':
 			camera = 2;
 			break;
+		case '3':
+			camera = 3;
+			break;
 		case 'a':
 			if(!gamePause) leftPressed = true;
 			break;
 		case 'd':
 			if(!gamePause) rightPressed = true;
+			break;
+		case 'r':
+			gameOver();
 			break;
 		case ' ':
 			pauseGame();
@@ -236,6 +242,11 @@ void display(void){
 		camPos[0] = charPos[0];
 		camPos[1] = 3;
 		camPos[2] = 9;
+	}
+	else if(camera == 3){
+		camPos[0] = 0;
+		camPos[1] = 25;
+		camPos[2] = 15;
 	}
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
