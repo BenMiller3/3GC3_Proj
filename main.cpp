@@ -105,16 +105,16 @@ void introduction(){
     cout << "and Kareem Abdel Mesih, 001407633, abdelk2 \n" << endl;
     cout << "and Ben Miller, 001416516, millebd  \n\n" << endl;
     cout << "INSTRUCTIONS:\n\n" << endl;
-    cout << "Click the green, yellow, or red box to begin the game at easy, medium or hard difficulty respectively" << endl;
+    cout << "Click the green, yellow or red box to begin the game at easy, medium or hard difficulty respectively" << endl;
     cout << "Use the arrow keys or A and D to move the character left and right\n" << endl;
     cout << "Avoid black boxes and collect green boxes\n" << endl;
     cout << "Your score is based on the distance you are able to go\n" << endl;
     cout << "The green boxes give you health while the black ones take away health\n" << endl;
-    cout << "Press the spacebar to pause and unpause the game\n" << endl;
-    cout << "Keys 1,2, and 3 can be used to try different camera angles: " << endl;
+    cout << "Press the spacebar to pause and resume the game\n" << endl;
+    cout << "Keys 1,2 and 3 can be used to adjust the different camera angles: " << endl;
     cout << "1 = Normal view, 2 = First Person View, 3 = Bird's eye view\n" << endl;
-    cout << "Press the r key to reset the game\n" << endl;
-    cout << "You can return to the main menu at any time by pressing the m key\n\n" << endl;
+    cout << "Press the R key to reset the game\n" << endl;
+    cout << "You can return to the main menu at any time by pressing the M key\n\n" << endl;
  }
 
 // Function to display text on screen
