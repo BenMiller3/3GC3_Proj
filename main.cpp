@@ -15,6 +15,12 @@ float acceleration = 0.0001f;
 #endif
 
 
+#define checkImageWidth 64
+#define checkImageHeight 64
+static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+static GLuint brownCheck;
+static GLuint greenCheck;
+
 //Game Speed
 float boxSpeed = gameSpeed;
 
@@ -32,7 +38,6 @@ float charRightAcc = 0.0f;
 //Clock for score
 float pauseClock = 0;
 float currentClock = 0;
-float gameOverClock = 0;
 
 
 //Initial Powerup location
@@ -51,13 +56,13 @@ bool leftPressed = false;
 bool rightPressed = false;
 
 //Score Variable
-int playerHealth = 1000;
+int score = 100;
 int playerScore = 0;
 
 //Game variables
 bool gamePause = false;
 bool resetGame = false;
-bool gameEnded = false;
+
 
 Scene theWorld = Scene();
 Character mainCharacter = Character();
@@ -103,6 +108,12 @@ void displayText(float x, float y, float z, const char *string){
 	for(int i=0;i<j;i++) glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 }
 
+// Function to end the game when the player runs out of health
+void gameOver(){
+    cout << "GAME OVER\n\n" << endl;
+	exit(0);
+}
+
 // Pauses the game when the SPACE BAR key is hit
 void pauseGame(){
 	if(gamePause==true) gamePause = false;
@@ -116,29 +127,14 @@ bool hitTest(int x, int z){
 	else return false;
 }
 
-void gameOver(){
-	gamePause = true;
-	printf("You scored: %d \n",playerScore);
-	playerHealth = 1000;
-	gameOverClock = clock() - pauseClock;
-	setPowerups = false;
-	charPos[0] = 0;
-	charPos[1] = 0;
-	charPos[2] = 10;
-}
-
-
 // Updates the score based on the player's current time spent in the game
 int updateScore(int score, bool effect){
-	if(effect and score > 0){
-		if(score >= 1000) return score;
+	if(effect){
+		if(score >= 300) return score;
 		else return score += 1;
 	}
 	else{
-		if(score <= 0){
-			gamePause = true;
-			gameEnded = true;
-		} 
+		if(score <= 0) gameOver();
 		else return score -= 1;
 	}
 }
@@ -190,25 +186,82 @@ void specialUp(int key, int x, int y){
 	else if(key == GLUT_KEY_LEFT) leftPressed = false;
 }
 
+void makeBrownCheckImage(void)
+{
+   int i, j, c;
+    
+   for (i = 0; i < checkImageHeight; i++) {
+      for (j = 0; j < checkImageWidth; j++) {
+         c = ((((i&0x8)==0)^((j&0x8))==0))*75;
+         checkImage[i][j][0] = (GLubyte) c;
+         checkImage[i][j][1] = (GLubyte) c;
+         checkImage[i][j][2] = (GLubyte) c;
+         checkImage[i][j][3] = (GLubyte) 150;
+      }
+   }
+}
+
+void makeGreenCheckImage(void)
+{
+   int i, j, c;
+    
+   for (i = 0; i < checkImageHeight; i++) {
+      for (j = 0; j < checkImageWidth; j++) {
+         c = ((((i&0x8)==0)^((j&0x8))==0))*255;
+         checkImage[i][j][0] = (GLubyte) c;
+         checkImage[i][j][1] = (GLubyte) c;
+         checkImage[i][j][2] = (GLubyte) c;
+         checkImage[i][j][3] = (GLubyte) 255;
+      }
+   }
+}
+
 // Game initialization
 void init(void){
-	glClearColor(0, 0.68, 0.146, 0);			
+	glClearColor(0, 0.68, 0.146, 0);  //0, 0.68, 0.146, 0
+	makeGreenCheckImage();	
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+  	glGenTextures(1, &greenCheck);
+  	glBindTexture(GL_TEXTURE_2D, greenCheck);
+
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
+   	                GL_NEAREST);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
+   	                GL_NEAREST);
+   	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, 
+                	checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 
+                	checkImage);
+	
 	glMatrixMode(GL_PROJECTION);	
 	glLoadIdentity();			
 	gluPerspective(45, 1, 1, 100);
+
+	makeBrownCheckImage();
+   	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+  	glGenTextures(1, &brownCheck);
+  	glBindTexture(GL_TEXTURE_2D, brownCheck);
+
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
+   	                GL_NEAREST);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
+   	                GL_NEAREST);
+   	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, 
+                	checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 
+                	checkImage);
 }
 
 // Main display function
 void display(void){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
-
-	if(gameEnded == true){
-		gameOver();
-		gameEnded = false;
-	}
 
 	if(!gamePause) boxSpeed = gameSpeed;
 	else boxSpeed = 0.0f;
@@ -244,12 +297,19 @@ void display(void){
 	}
 
 	//Draw road
+
+	glEnable(GL_TEXTURE_2D);
+   	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+   	glBindTexture(GL_TEXTURE_2D, brownCheck);
+
     glPushMatrix();
         theWorld.drawRoad(zLocation);
     glPopMatrix();
 
+	glDisable(GL_TEXTURE_2D);
+
     //Score calculated by time
-    playerScore = (clock() - pauseClock - gameOverClock) / 100000;
+    playerScore = (clock() - pauseClock) / 100000;
 
     if(gamePause) pauseClock = clock() - currentClock;
     else currentClock = clock() - pauseClock;
@@ -259,7 +319,7 @@ void display(void){
 	snprintf(buffer, 100, "Score: %d", playerScore);  
 
 	char healthBuffer[100];
-	snprintf(healthBuffer, 100, "Health: %d %%", playerHealth/10);
+	snprintf(healthBuffer, 100, "Health: %d ", score);
 
 	// Draw text
 	glPushMatrix();
@@ -275,7 +335,7 @@ void display(void){
 
 	//Draw Assets
     glPushMatrix();
-        if(playerHealth < 200){
+        if(score < 20){
             //alpha blend
             mainCharacter.drawCharacter(charPos, boxSpeed, true);
         }
@@ -322,7 +382,7 @@ void display(void){
 	    	actualCollectZ[i] += boxSpeed;
 	    	if(hitTest(collectX[i], actualCollectZ[i])){
 	    		collectZ[i] = 100;
-	    		playerHealth = updateScore(playerHealth, true);
+	    		score = updateScore(score, true);
 	    	}
 	    }
 
@@ -330,7 +390,7 @@ void display(void){
 	    	actualAvoidZ[i] += boxSpeed;
 	    	if(hitTest(avoidX[i], actualAvoidZ[i])){
 	    		avoidZ[i] = 100;
-	    		playerHealth = updateScore(playerHealth, false);
+	    		score = updateScore(score, false);
 	    	}
 	    }
 	}
