@@ -39,7 +39,7 @@ float gameOverClock = 0;
 
 //Initial Powerup location
 bool setPowerups = false;
-
+int currentLevel = 1;
 
 //World Position
 float zLocation = -5.0f;
@@ -331,8 +331,8 @@ void display(void){
 		displayText(1 + charPos[0], 3, -zLocation+5, buffer);
 	}
     	
-    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10) displayText(-2, 3, -zLocation, finalScoreBuffer);
-    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
+    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-2, 3, -zLocation, finalScoreBuffer);
+    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
     glPopMatrix();
 
     //Draw collect and avoid boxes at random locations
