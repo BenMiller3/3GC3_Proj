@@ -81,7 +81,6 @@ Box collect = Box();
 Box avoid = Box();
 
 // Main Menu
-Menu mainMenu = Menu();
 bool gameStart = false;
 int difficulty = 0;
 
