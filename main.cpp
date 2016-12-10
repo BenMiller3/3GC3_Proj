@@ -17,6 +17,12 @@ float acceleration = 0.0001f;
 float speedIncrease = 0.005f;
 #endif
 
+// Texturing values
+#define checkImageWidth 64
+#define checkImageHeight 64
+static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+static GLuint brownCheck;
+static GLuint greenCheck;
 
 //Game Speed
 float boxSpeed = gameSpeed;
@@ -265,9 +271,63 @@ void specialUp(int key, int x, int y){
 	else if(key == GLUT_KEY_LEFT) leftPressed = false;
 }
 
+void makeBrownCheckImage(void)
+ {
+    int i, j, c;
+     
+    for (i = 0; i < checkImageHeight; i++) {
+       for (j = 0; j < checkImageWidth; j++) {
+          c = ((((i&0x8)==0)^((j&0x8))==0))*75;
+          checkImage[i][j][0] = (GLubyte) c;
+          checkImage[i][j][1] = (GLubyte) c;
+          checkImage[i][j][2] = (GLubyte) c;
+          checkImage[i][j][3] = (GLubyte) 15;
+       }
+    }
+ }
+ 
+ void makeGreenCheckImage(void)
+ {
+    int i, j, c;
+     
+    for (i = 0; i < checkImageHeight; i++) {
+       for (j = 0; j < checkImageWidth; j++) {
+          c = ((((i&0x8)==0)^((j&0x8))==0))*255;
+          checkImage[i][j][0] = (GLubyte) c;
+          checkImage[i][j][1] = (GLubyte) c;
+          checkImage[i][j][2] = (GLubyte) c;
+          checkImage[i][j][3] = (GLubyte) 255;
+       }
+    }
+ }
+
 // Game initialization
 void init(void){
-	glClearColor(0, 0.68, 0.146, 0);			
+	glClearColor(0, 0.68, 0.146, 0);
+
+	/* // Grass texture
+	makeGreenCheckImage();	
+ 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 	
+   	glGenTextures(1, &greenCheck);
+   	glBindTexture(GL_TEXTURE_2D, greenCheck);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+   	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,checkImage);
+   	*/
+
+ 	// Dirt path texture
+   	makeBrownCheckImage();
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+   	glGenTextures(1, &brownCheck);
+   	glBindTexture(GL_TEXTURE_2D, brownCheck);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,checkImage);
+
 	glMatrixMode(GL_PROJECTION);	
 	glLoadIdentity();			
 	gluPerspective(45, 1, 1, 100);
@@ -342,10 +402,16 @@ void display(void){
         currentLevel += 1;
 	}
 
-	//Draw road
+	// Draw dirt path
+	glEnable(GL_TEXTURE_2D);
+    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    	glBindTexture(GL_TEXTURE_2D, brownCheck);
+	
     glPushMatrix();
         theWorld.drawRoad(zLocation);
     glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
 
     //Score calculated by time
     playerScore = (clock() - pauseClock - gameOverClock) / 100000;
