@@ -40,7 +40,7 @@ float gameOverClock = 0;
 
 //Initial Powerup location
 bool setPowerups = false;
-int currentLevel = 1;
+int currentLevel = 0;
 
 //World Position
 float zLocation = -5.0f;
@@ -153,6 +153,7 @@ void gameOver(){
 	#endif
 
 	camera = 1;
+	currentLevel = 0;
 }
 
 
@@ -338,6 +339,7 @@ void display(void){
 
         //Speed increases every level up
         gameSpeed += speedIncrease;
+        currentLevel += 1;
 	}
 
 	//Draw road
@@ -361,6 +363,9 @@ void display(void){
 	char finalScoreBuffer[100];
 	snprintf(finalScoreBuffer, 100, "FINAL SCORE = %f", gameOverScore);
 
+	char levelBuffer[100];
+	snprintf(levelBuffer, 100, "Level: %d",currentLevel);
+
 	if(gameStart == true){
 
 
@@ -369,10 +374,12 @@ void display(void){
 	if(camera != 2){
 		displayText(-6, 6, -zLocation, healthBuffer);
     	displayText(2.8, 6.0, -zLocation, buffer);
+    	displayText(-1,6.0,-zLocation,levelBuffer);
 	}
 	else{
 		displayText(-1 + charPos[0], 3, -zLocation+5, healthBuffer);
 		displayText(1 + charPos[0], 3, -zLocation+5, buffer);
+		displayText(0 + charPos[0], 3, -zLocation+5, levelBuffer);
 	}
     	
     	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-2, 3, -zLocation, finalScoreBuffer);
