@@ -77,6 +77,7 @@ Box avoid = Box();
 // Main Menu
 Menu mainMenu = Menu();
 bool gameStart = false;
+int difficulty = 0;
 
 //Boxes to collect
 int totalCollectBoxes = 10; //Total number of boxes per loop
@@ -99,6 +100,7 @@ void introduction(){
     cout << "and Kareem Abdel Mesih, 001407633, abdelk2 \n" << endl;
     cout << "and Ben Miller, 001416516, millebd  \n\n" << endl;
     cout << "INSTRUCTIONS:\n\n" << endl;
+    cout << "Click the green, yellow, or red box to begin the game at easy, medium or hard difficulty respectively" << endl;
     cout << "Use the arrow keys or A and D to move the character left and right\n" << endl;
     cout << "Avoid black boxes and collect green boxes\n" << endl;
     cout << "Your score is based on the distance you are able to go\n" << endl;
@@ -106,7 +108,8 @@ void introduction(){
     cout << "Press the spacebar to pause and unpause the game\n" << endl;
     cout << "Keys 1,2, and 3 can be used to try different camera angles: " << endl;
     cout << "1 = Normal view, 2 = First Person View, 3 = Bird's eye view\n" << endl;
-    cout << "Press the r key to reset the game\n\n" << endl;
+    cout << "Press the r key to reset the game\n" << endl;
+    cout << "You can return to the main menu at any time by pressing the m key\n\n" << endl;
  }
 
 // Function to display text on screen
@@ -191,6 +194,9 @@ void keyboard(unsigned char key, int xIn, int yIn){
 		case 'r':
 			gameOver();
 			gamePause = false;
+		case 'm':
+			gameOver();
+			gameStart = false;
 			break;
 		case ' ':
 			pauseGame();
@@ -223,10 +229,31 @@ void special(int key, int x, int y){
 
 void mouse(int btn, int state, int mouseX, int mouseY)
 {
-	if(btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	if(btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN && mouseY<170 && mouseY>=70 && mouseX > 12 && (mouseX < 170 && mouseX > 50) || (mouseX > 260 && mouseX < 375) || (mouseX>490 && mouseX < 630))
 		{
+			if(mouseX < 170 && mouseX > 50){
+				difficulty = 1;
 				gameStart = true;
 				gamePause = false;
+			}
+
+			else if (mouseX < 428){
+				difficulty = 2;
+				gameStart = true;
+				gamePause = false;
+			}
+
+			else if (mouseX > 428){
+				difficulty = 3;
+				gameStart = true;
+				gamePause = false;
+			}
+
+			#ifdef __APPLE__
+				gameSpeed = 0.15f*difficulty;
+			#else
+				gameSpeed = 0.01f*difficulty;
+			#endif
 		}
 }
 
@@ -350,6 +377,8 @@ void display(void){
     	
     	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-2, 3, -zLocation, finalScoreBuffer);
     	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
+    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-4, 0, -zLocation, "Press m to return to menu");
+    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-4, -2, -zLocation, "Press q to quit");
     glPopMatrix();
 }
 
