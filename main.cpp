@@ -6,12 +6,14 @@
 // Different compile issue fix
 #ifdef __APPLE__
 float charSpeed = 0.13f;
-float gameSpeed = 0.3f;
+float gameSpeed = 0.15f;
 float acceleration = 0.015f;
+float speedIncrease = 0.075;
 #else
 float charSpeed = 0.002f;
-float gameSpeed = 0.02f;
+float gameSpeed = 0.01f;
 float acceleration = 0.0001f;
+float speedIncrease = 0.005f;
 #endif
 
 
@@ -58,6 +60,10 @@ int playerScore = 0;
 bool gamePause = false;
 bool resetGame = false;
 bool gameEnded = false;
+float gameOverScore = 0;
+
+// Levels
+int increaseSpeed = 0;
 
 Scene theWorld = Scene();
 Character mainCharacter = Character();
@@ -102,7 +108,6 @@ void displayText(float x, float y, float z, const char *string){
 	glRasterPos3f(x, y, z);
 	for(int i=0;i<j;i++) glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 }
-
 // Pauses the game when the SPACE BAR key is hit
 void pauseGame(){
 	if(gamePause==true) gamePause = false;
@@ -119,12 +124,23 @@ bool hitTest(int x, int z){
 void gameOver(){
 	gamePause = true;
 	printf("You scored: %d \n",playerScore);
+
+	// Resetting Values
 	playerHealth = 1000;
 	gameOverClock = clock() - pauseClock;
 	setPowerups = false;
 	charPos[0] = 0;
 	charPos[1] = 0;
 	charPos[2] = 10;
+
+	// Reset initial game speeds
+	#ifdef __APPLE__
+	gameSpeed = 0.15f;
+	speedIncrease = 0.075f;
+	#else
+	gameSpeed = 0.01f;
+	speedIncrease = 0.005f;
+	#endif
 }
 
 
@@ -209,6 +225,9 @@ void display(void){
 		gameOver();
 		gameEnded = false;
 	}
+	else{
+		gameOverScore = playerScore;
+	}
 
 	if(!gamePause) boxSpeed = gameSpeed;
 	else boxSpeed = 0.0f;
@@ -241,6 +260,9 @@ void display(void){
         glPushMatrix();
             mainCharacter.drawCharacter(charPos, -245.0f, false);
         glPopMatrix();
+
+        //Speed increases every level up
+        gameSpeed += speedIncrease;
 	}
 
 	//Draw road
@@ -261,10 +283,15 @@ void display(void){
 	char healthBuffer[100];
 	snprintf(healthBuffer, 100, "Health: %d %%", playerHealth/10);
 
+	char finalScoreBuffer[100];
+	snprintf(finalScoreBuffer, 100, "FINAL SCORE = %f", gameOverScore);
+
 	// Draw text
 	glPushMatrix();
     	displayText(-6, 6, -zLocation, healthBuffer);
     	displayText(2.8, 6.0, -zLocation, buffer);
+    	if(gamePause) displayText(-2, 3, -zLocation, finalScoreBuffer);
+    	if(gamePause) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
     glPopMatrix();
 
     //Draw collect and avoid boxes at random locations
