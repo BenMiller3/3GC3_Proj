@@ -18,12 +18,12 @@ else
 	endif
 endif
 
-PROGRAM_NAME= Final_Project
+PROGRAM_NAME= Block_Runner.x
 
 run: $(PROGRAM_NAME)
 		./$(PROGRAM_NAME)$(EXEEXT)
 
-$(PROGRAM_NAME): main.o character.o box.o scene.o
+$(PROGRAM_NAME): main.o character.o box.o scene.o menu.o
 		$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
 clean:

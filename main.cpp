@@ -2,6 +2,7 @@
 #include "character.h"
 #include "box.h"
 #include "scene.h"
+#include "menu.h"
 
 // Different compile issue fix
 #ifdef __APPLE__
@@ -73,6 +74,9 @@ Character mainCharacter = Character();
 Box collect = Box();
 Box avoid = Box();
 
+// Main Menu
+Menu mainMenu = Menu();
+bool gameStart = false;
 
 //Boxes to collect
 int totalCollectBoxes = 10; //Total number of boxes per loop
@@ -101,7 +105,8 @@ void introduction(){
     cout << "The green boxes give you health while the black ones take away health\n" << endl;
     cout << "Press the spacebar to pause and unpause the game\n" << endl;
     cout << "Keys 1,2, and 3 can be used to try different camera angles: " << endl;
-    cout << "1 = Normal view, 2 = First Person View, 3 = Bird's eye view\n\n" << endl;
+    cout << "1 = Normal view, 2 = First Person View, 3 = Bird's eye view\n" << endl;
+    cout << "Press the r key to reset the game\n\n" << endl;
  }
 
 // Function to display text on screen
@@ -216,6 +221,15 @@ void special(int key, int x, int y){
 	glutPostRedisplay();
 }
 
+void mouse(int btn, int state, int mouseX, int mouseY)
+{
+	if(btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		{
+				gameStart = true;
+				gamePause = false;
+		}
+}
+
 
 //Smooth Character Movement Animation
 void specialUp(int key, int x, int y){
@@ -320,6 +334,9 @@ void display(void){
 	char finalScoreBuffer[100];
 	snprintf(finalScoreBuffer, 100, "FINAL SCORE = %f", gameOverScore);
 
+	if(gameStart == true){
+
+
 	// Draw text
 	glPushMatrix();
 	if(camera != 2){
@@ -334,6 +351,7 @@ void display(void){
     	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-2, 3, -zLocation, finalScoreBuffer);
     	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
     glPopMatrix();
+}
 
     //Draw collect and avoid boxes at random locations
     glPushMatrix();
@@ -401,7 +419,47 @@ void display(void){
 	    		playerHealth = updateScore(playerHealth, false);
 	    	}
 	    }
+	
+
+}
+
+	if(gameStart == false){
+
+		gamePause = true;
+		camPos[0] = 0;
+		camPos[1] = 0;
+		camPos[2] = 5;
+		glColor3f(1,1,1);
+		glutSolidCube(17);
+
+		//Easy (Green)
+		glPushMatrix();
+			glTranslatef(-6.5,2,0);
+			glColor3f(0,1,0);
+			glutSolidCube(2.5);
+		glPopMatrix();
+
+		// Medium (Yellow)
+		glPushMatrix();
+			glTranslatef(0,2,0);
+			glColor3f(1,1,0);
+			glutSolidCube(2.5);
+		glPopMatrix();
+
+		// Hard (Red)
+		glPushMatrix();
+			glTranslatef(6.5,2,0);
+			glColor3f(1,0,0);
+			glutSolidCube(2.5);
+		glPopMatrix();
+
+		glColor3f(0,0,0);
+		displayText(-3.5, 3.5, -zLocation+5, "** BLOCK BOARDING **");
+		displayText(-3, 2, -zLocation+5, "Click green for easy");
+		displayText(-3.1, 0, -zLocation+5, "Click yellow for medium");
+		displayText(-3.2, -2, -zLocation+5, "Click red for hard");
 	}
+
     glutSwapBuffers();
 	glutPostRedisplay();
     glFlush();
@@ -425,6 +483,8 @@ int main(int argc, char** argv){
 	glutKeyboardUpFunc(keyUp);
 	glutSpecialFunc(special);
 	glutSpecialUpFunc(specialUp);
+
+	glutMouseFunc(mouse);
 
 	introduction();
 
