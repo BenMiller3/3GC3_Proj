@@ -6,16 +6,20 @@
 // Different compile issue fix
 #ifdef __APPLE__
 float charSpeed = 0.13f;
-float gameSpeed = 0.15f;
+float gameSpeed = 0.3f;
 float acceleration = 0.015f;
-float speedIncrease = 0.075;
 #else
 float charSpeed = 0.002f;
-float gameSpeed = 0.01f;
+float gameSpeed = 0.02f;
 float acceleration = 0.0001f;
-float speedIncrease = 0.005f;
 #endif
 
+
+#define checkImageWidth 1024
+#define checkImageHeight 1024
+static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+static GLuint brownCheck;
+static GLuint greenCheck;
 
 //Game Speed
 float boxSpeed = gameSpeed;
@@ -34,12 +38,11 @@ float charRightAcc = 0.0f;
 //Clock for score
 float pauseClock = 0;
 float currentClock = 0;
-float gameOverClock = 0;
 
 
 //Initial Powerup location
 bool setPowerups = false;
-int currentLevel = 1;
+
 
 //World Position
 float zLocation = -5.0f;
@@ -47,24 +50,19 @@ float zLocation = -5.0f;
 
 //Camera Position
 float camPos[] = {0, 10, 15};
-int camera = 1;
 
 //Smooth Character Movement Animation
 bool leftPressed = false;
 bool rightPressed = false;
 
 //Score Variable
-int playerHealth = 1000;
+int score = 100;
 int playerScore = 0;
 
 //Game variables
 bool gamePause = false;
 bool resetGame = false;
-bool gameEnded = false;
-float gameOverScore = 0;
 
-// Levels
-int increaseSpeed = 0;
 
 Scene theWorld = Scene();
 Character mainCharacter = Character();
@@ -99,9 +97,7 @@ void introduction(){
     cout << "Avoid black boxes and collect green boxes\n" << endl;
     cout << "Your score is based on the distance you are able to go\n" << endl;
     cout << "The green boxes give you health while the black ones take away health\n" << endl;
-    cout << "Press the spacebar to pause and unpause the game\n" << endl;
-    cout << "Keys 1,2, and 3 can be used to try different camera angles: " << endl;
-    cout << "1 = Normal view, 2 = First Person View, 3 = Bird's eye view\n\n" << endl;
+    cout << "Press the spacebar to pause and unpause the game\n\n" << endl;
  }
 
 // Function to display text on screen
@@ -111,6 +107,13 @@ void displayText(float x, float y, float z, const char *string){
 	glRasterPos3f(x, y, z);
 	for(int i=0;i<j;i++) glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 }
+
+// Function to end the game when the player runs out of health
+void gameOver(){
+    cout << "GAME OVER\n\n" << endl;
+	exit(0);
+}
+
 // Pauses the game when the SPACE BAR key is hit
 void pauseGame(){
 	if(gamePause==true) gamePause = false;
@@ -124,41 +127,14 @@ bool hitTest(int x, int z){
 	else return false;
 }
 
-void gameOver(){
-	gamePause = true;
-
-	// Resetting Values
-	playerHealth = 1000;
-	gameOverClock = clock() - pauseClock;
-	setPowerups = false;
-	charPos[0] = 0;
-	charPos[1] = 0;
-	charPos[2] = 10;
-
-	// Reset initial game speeds
-	#ifdef __APPLE__
-	gameSpeed = 0.15f;
-	speedIncrease = 0.075f;
-	#else
-	gameSpeed = 0.01f;
-	speedIncrease = 0.005f;
-	#endif
-
-	camera = 1;
-}
-
-
 // Updates the score based on the player's current time spent in the game
 int updateScore(int score, bool effect){
-	if(effect and score > 0){
-		if(score >= 1000) return score;
+	if(effect){
+		if(score >= 300) return score;
 		else return score += 1;
 	}
 	else{
-		if(score <= 0){
-			gamePause = true;
-			gameEnded = true;
-		} 
+		if(score <= 0) gameOver();
 		else return score -= 1;
 	}
 }
@@ -168,24 +144,11 @@ void keyboard(unsigned char key, int xIn, int yIn){
 	switch(key){
 		case 'q': exit(0);
 		case 27: exit(0);
-		case '1':
-			camera = 1;
-			break;
-		case '2':
-			camera = 2;
-			break;
-		case '3':
-			camera = 3;
-			break;
 		case 'a':
 			if(!gamePause) leftPressed = true;
 			break;
 		case 'd':
 			if(!gamePause) rightPressed = true;
-			break;
-		case 'r':
-			gameOver();
-			gamePause = false;
 			break;
 		case ' ':
 			pauseGame();
@@ -223,45 +186,82 @@ void specialUp(int key, int x, int y){
 	else if(key == GLUT_KEY_LEFT) leftPressed = false;
 }
 
+void makeBrownCheckImage(void)
+{
+   int i, j, c;
+    
+   for (i = 0; i < checkImageHeight; i++) {
+      for (j = 0; j < checkImageWidth; j++) {
+         c = ((((i&0x8)==0)^((j&0x8))==0))* 15;
+         checkImage[i][j][0] = (GLubyte) c;
+         checkImage[i][j][1] = (GLubyte) c;
+         checkImage[i][j][2] = (GLubyte) c;
+         checkImage[i][j][3] = (GLubyte) 75;
+      }
+   }
+}
+
+void makeGreenCheckImage(void)
+{
+   int i, j, c;
+    
+   for (i = 0; i < checkImageHeight; i++) {
+      for (j = 0; j < checkImageWidth; j++) {
+         c = ((((i&0x8)==0)^((j&0x8))==0))*255;
+         checkImage[i][j][0] = (GLubyte) c;
+         checkImage[i][j][1] = (GLubyte) c;
+         checkImage[i][j][2] = (GLubyte) c;
+         checkImage[i][j][3] = (GLubyte) 255;
+      }
+   }
+}
+
 // Game initialization
 void init(void){
-	glClearColor(0, 0.68, 0.146, 0);			
+	glClearColor(0, 0.68, 0.146, 0);  //0, 0.68, 0.146, 0
+	makeGreenCheckImage();	
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+  	glGenTextures(1, &greenCheck);
+  	glBindTexture(GL_TEXTURE_2D, greenCheck);
+
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
+   	                GL_NEAREST);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
+   	                GL_NEAREST);
+   	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, 
+                	checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 
+                	checkImage);
+	
 	glMatrixMode(GL_PROJECTION);	
 	glLoadIdentity();			
 	gluPerspective(45, 1, 1, 100);
+
+	makeBrownCheckImage();
+   	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+  	glGenTextures(1, &brownCheck);
+  	glBindTexture(GL_TEXTURE_2D, brownCheck);
+
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
+   	                GL_NEAREST);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
+   	                GL_NEAREST);
+   	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, 
+                	checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 
+                	checkImage);
 }
 
 // Main display function
 void display(void){
-
-	if(camera == 1){
-	
-	camPos[0] = 0;
-	camPos[1] =  10;
-	camPos[2] = 15;
-	}
-	else if (camera == 2){
-		camPos[0] = charPos[0];
-		camPos[1] = 3;
-		camPos[2] = 9;
-	}
-	else if(camera == 3){
-		camPos[0] = 0;
-		camPos[1] = 25;
-		camPos[2] = 15;
-	}
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
-
-	if(gameEnded == true){
-		gameOver();
-		gameEnded = false;
-	}
-
-	if(!gamePause) gameOverScore = playerScore;
 
 	if(!gamePause) boxSpeed = gameSpeed;
 	else boxSpeed = 0.0f;
@@ -294,18 +294,22 @@ void display(void){
         glPushMatrix();
             mainCharacter.drawCharacter(charPos, -245.0f, false);
         glPopMatrix();
-
-        //Speed increases every level up
-        gameSpeed += speedIncrease;
 	}
 
 	//Draw road
+
+	glEnable(GL_TEXTURE_2D);
+   	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+   	glBindTexture(GL_TEXTURE_2D, brownCheck);
+
     glPushMatrix();
         theWorld.drawRoad(zLocation);
     glPopMatrix();
 
+	glDisable(GL_TEXTURE_2D);
+
     //Score calculated by time
-    playerScore = (clock() - pauseClock - gameOverClock) / 100000;
+    playerScore = (clock() - pauseClock) / 100000;
 
     if(gamePause) pauseClock = clock() - currentClock;
     else currentClock = clock() - pauseClock;
@@ -315,24 +319,12 @@ void display(void){
 	snprintf(buffer, 100, "Score: %d", playerScore);  
 
 	char healthBuffer[100];
-	snprintf(healthBuffer, 100, "Health: %d %%", playerHealth/10);
-
-	char finalScoreBuffer[100];
-	snprintf(finalScoreBuffer, 100, "FINAL SCORE = %f", gameOverScore);
+	snprintf(healthBuffer, 100, "Health: %d ", score);
 
 	// Draw text
 	glPushMatrix();
-	if(camera != 2){
-		displayText(-6, 6, -zLocation, healthBuffer);
+    	displayText(-6, 6, -zLocation, healthBuffer);
     	displayText(2.8, 6.0, -zLocation, buffer);
-	}
-	else{
-		displayText(-1 + charPos[0], 3, -zLocation+5, healthBuffer);
-		displayText(1 + charPos[0], 3, -zLocation+5, buffer);
-	}
-    	
-    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-2, 3, -zLocation, finalScoreBuffer);
-    	if(gamePause & charPos[0] == 0 & charPos[1] == 0  & charPos[2] == 10 || gamePause & playerScore != gameOverScore) displayText(-4, 2, -zLocation, "PRESS SPACE BAR TO PLAY AGAIN");
     glPopMatrix();
 
     //Draw collect and avoid boxes at random locations
@@ -343,7 +335,7 @@ void display(void){
 
 	//Draw Assets
     glPushMatrix();
-        if(playerHealth < 200){
+        if(score < 20){
             //alpha blend
             mainCharacter.drawCharacter(charPos, boxSpeed, true);
         }
@@ -390,7 +382,7 @@ void display(void){
 	    	actualCollectZ[i] += boxSpeed;
 	    	if(hitTest(collectX[i], actualCollectZ[i])){
 	    		collectZ[i] = 100;
-	    		playerHealth = updateScore(playerHealth, true);
+	    		score = updateScore(score, true);
 	    	}
 	    }
 
@@ -398,7 +390,7 @@ void display(void){
 	    	actualAvoidZ[i] += boxSpeed;
 	    	if(hitTest(avoidX[i], actualAvoidZ[i])){
 	    		avoidZ[i] = 100;
-	    		playerHealth = updateScore(playerHealth, false);
+	    		score = updateScore(score, false);
 	    	}
 	    }
 	}
