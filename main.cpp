@@ -161,6 +161,27 @@ void gameOver(){
 	currentLevel = 0;
 }
 
+void restartGame(){
+	gamePause = false;
+	playerHealth = 1000;
+	gameOverClock = clock() - pauseClock;
+	setPowerups = false;
+	charPos[0] = 0;
+	charPos[1] = 0;
+	charPos[2] = 10;
+
+	// Reset initial game speeds
+	#ifdef __APPLE__
+	gameSpeed = 0.15f;
+	speedIncrease = 0.075f;
+	#else
+	gameSpeed = 0.01f;
+	speedIncrease = 0.005f;
+	#endif
+
+	camera = 1;
+	currentLevel = 0;
+}
 
 // Updates the score based on the player's current time spent in the game
 int updateScore(int score, bool effect){
@@ -186,10 +207,10 @@ void keyboard(unsigned char key, int xIn, int yIn){
 			camera = 1;
 			break;
 		case '2':
-			camera = 2;
+			if(gameStart) camera = 2;
 			break;
 		case '3':
-			camera = 3;
+			if(gameStart) camera = 3;
 			break;
 		case 'a':
 			if(!gamePause) leftPressed = true;
@@ -198,8 +219,8 @@ void keyboard(unsigned char key, int xIn, int yIn){
 			if(!gamePause) rightPressed = true;
 			break;
 		case 'r':
-			gameOver();
-			gamePause = false;
+			restartGame();
+			break;
 		case 'm':
 			gameOver();
 			gameStart = false;
