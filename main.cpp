@@ -22,7 +22,6 @@ float speedIncrease = 0.005f;
 #define checkImageHeight 64
 static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 static GLuint brownCheck;
-static GLuint greenCheck;
 
 //Game Speed
 float boxSpeed = gameSpeed;
@@ -306,36 +305,9 @@ void makeBrownCheckImage(void)
     }
  }
  
- void makeGreenCheckImage(void)
- {
-    int i, j, c;
-     
-    for (i = 0; i < checkImageHeight; i++) {
-       for (j = 0; j < checkImageWidth; j++) {
-          c = ((((i&0x8)==0)^((j&0x8))==0))*255;
-          checkImage[i][j][0] = (GLubyte) c;
-          checkImage[i][j][1] = (GLubyte) c;
-          checkImage[i][j][2] = (GLubyte) c;
-          checkImage[i][j][3] = (GLubyte) 255;
-       }
-    }
- }
-
 // Game initialization
 void init(void){
 	glClearColor(0, 0.68, 0.146, 0);
-
-	/* // Grass texture
-	makeGreenCheckImage();	
- 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 	
-   	glGenTextures(1, &greenCheck);
-   	glBindTexture(GL_TEXTURE_2D, greenCheck);
-   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-   	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,checkImage);
-   	*/
 
  	// Dirt path texture
    	makeBrownCheckImage();
