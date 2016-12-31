@@ -2,7 +2,6 @@
 #include "character.h"
 #include "box.h"
 #include "scene.h"
-#include "menu.h"
 
 // Different compile issue fix
 #ifdef __APPLE__
