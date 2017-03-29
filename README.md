@@ -2,10 +2,7 @@
 ==============
 
 Created by:
-	Kareem Abdel Mesih - 001407633 - abdelk2
-	Ben Miller - 001416516 - millebd
-	Victoria Graff - 001401451 - graffve
-	Emily Ashworth - 001402976 - ashworel
+	Kareem Abdel Mesih, Ben Miller, Victoria Graff, and Emily Ashworth 
 
 ## Compilation Instructions:
 
