@@ -26,12 +26,12 @@ This will create the scene. Follow the game instructions below.
 
 ## Features:
 
-	* Alpha blending when > 20% health 	
-	* Animated character		
-	* Picking (Menu)		
-	* Advanced Camera Control Options	
-	* Standard Lighting (Sun)		
-	* Textures 				
-	* Infinite gameplay with 3 difficulties	and incrementing level gameplay
-	* Realistic Physics		
+	- Alpha blending when > 20% health 	
+	- Animated character		
+	- Picking (Menu)		
+	- Advanced Camera Control Options	
+	- Standard Lighting (Sun)		
+	- Textures 				
+	- Infinite gameplay with 3 difficulties	and incrementing level gameplay
+	- Realistic Physics		
 
