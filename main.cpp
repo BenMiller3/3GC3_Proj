@@ -98,10 +98,10 @@ float actualAvoidZ[90]; //Updated Z coordinate of the box (MUST be the same as t
 // Output the game instructions to the commandline
 void introduction(){
     cout << "\n\n\nBlock Boarding\n" << endl;
-    cout << "by Victoria Graff, 001401451, graffve\n" << endl;
-    cout << "and Emily Ashworth, 001402976, ashworel \n" << endl;
-    cout << "and Kareem Abdel Mesih, 001407633, abdelk2 \n" << endl;
-    cout << "and Ben Miller, 001416516, millebd  \n\n" << endl;
+    cout << "by Victoria Graff\n" << endl;
+    cout << "and Emily Ashworth\n" << endl;
+    cout << "and Kareem Abdel Mesih\n" << endl;
+    cout << "and Ben Miller\n\n" << endl;
     cout << "INSTRUCTIONS:\n\n" << endl;
     cout << "Click the green, yellow or red box to begin the game at easy, medium or hard difficulty respectively" << endl;
     cout << "Use the arrow keys or A and D to move the character left and right\n" << endl;
